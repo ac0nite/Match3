@@ -1,19 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Common
 {
     public interface IPool<T>
     {
         T Get();
-        void Return(T item);
+        void Put(T item);
     }
     public abstract class BasePool<T> : IPool<T>
     {
         private Queue<T> _pool;
+        private readonly int _capacity;
+
         protected BasePool(int capacity)
         {
-            _pool = new Queue<T>(capacity);
-            for (int i = 0; i < capacity; i++)
+            _capacity = capacity;
+        }
+        
+        protected void Initialise()
+        {
+            _pool = new Queue<T>(_capacity);
+            for (int i = 0; i < _capacity; i++)
                 _pool.Enqueue(Create());
         }
 
@@ -25,7 +34,7 @@ namespace Common
             return Configure(_pool.Dequeue());
         }
 
-        public void Return(T item)
+        public void Put(T item)
         {
             _pool.Enqueue(item);
         }

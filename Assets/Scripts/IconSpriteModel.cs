@@ -6,10 +6,10 @@ namespace Common
     [Serializable]
     public class IconSpriteModel
     {
-        [SerializeField] private string _name;
+        [SerializeField] private string _id;
         [SerializeField] private Sprite _icon;
 
-        public string Name => _name;
+        public string Id => _id;
         public Sprite Icon => _icon;
     }
 }
