@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Common.Debug
 {
@@ -11,24 +12,31 @@ namespace Common.Debug
 
         [SerializeField] private IconSpriteModel[] _spriteModels;
         [SerializeField] private Slot _slotPrefab;
-        [SerializeField] private Item _itemPrefab;
+        [SerializeField] private Tile tilePrefab;
+
+        [SerializeField] private InputSystem _input;
         
         private Vector3 _originalPosition;
         public SlotPool SlotPool;
-        public ItemPool ItemPool;
+        public TilePool tilePool;
         public Checker Checker;
+        public ShiftingTile Shifting;
 
-        private Slot[,] _slotGrid;
+        public Slot[,] BoardSlot;
+        private IGameplay _gameplay;
 
         private void Start()
         {
             var capacity = _row * _column * 2;
             SlotPool = new SlotPool(_slotPrefab,capacity);
-            ItemPool = new ItemPool(_itemPrefab, capacity);
-            _slotGrid = new Slot[_row, _column];
-            Checker = new Checker(_slotGrid);
-            
+            tilePool = new TilePool(tilePrefab, capacity);
+            BoardSlot = new Slot[_row, _column];
+            Checker = new Checker(BoardSlot);
+            Shifting = new ShiftingTile(this);
+            _gameplay = new Gameplay(this, _input, Shifting);
+
             CreateLevel();
+            _gameplay.SetActive(true);
         }
 
         private void CreateLevel()
@@ -41,7 +49,7 @@ namespace Common.Debug
                 {
                     var position = GetWorldPosition(i, j);
                     var index = UnityEngine.Random.Range(0, _spriteModels.Length);
-                    var item = ItemPool.Get().Initialise(_spriteModels[index]);
+                    var item = tilePool.Get().Initialise(_spriteModels[index]);
                     var slot = SlotPool.Get().Initialise(position, new GridPosition(i, j));
                     if (j != _column-1)
                     {
@@ -49,7 +57,7 @@ namespace Common.Debug
                     }
                     slot.SetActive(true);
 
-                    _slotGrid[i, j] = slot;
+                    BoardSlot[i, j] = slot;
                 }
             }
         }
@@ -70,9 +78,14 @@ namespace Common.Debug
             return new GridPosition(Convert.ToInt32(-rowIndex), Convert.ToInt32(columnIndex));
         }
         
-        private Vector3 GetWorldPosition(int rowIndex, int columnIndex)
+        public Vector3 GetWorldPosition(int rowIndex, int columnIndex)
         {
             return new Vector3(columnIndex, -rowIndex) * _tileSize + _originalPosition;
+        }
+        
+        public Vector3 GetWorldPosition(GridPosition position)
+        {
+            return new Vector3(position.ColumnIndex, -position.RowIndex) * _tileSize + _originalPosition;
         }
     }
 }

@@ -23,23 +23,23 @@ namespace Common
 
         public bool Lock
         {
-            get => _inputImage.raycastTarget; 
+            get => !_inputImage.raycastTarget; 
             set => _inputImage.raycastTarget = !value;
         }
         
         public void OnPointerDown(PointerEventData eventData)
         {
-            PointerDown?.Invoke(GetWorldPosition(eventData.position));
+            if(!Lock) PointerDown?.Invoke(GetWorldPosition(eventData.position));
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            PointerDrag?.Invoke(GetWorldPosition(eventData.position));
+            if(!Lock) PointerDrag?.Invoke(GetWorldPosition(eventData.position));
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            PointerUp?.Invoke(GetWorldPosition(eventData.position));
+            if(!Lock) PointerUp?.Invoke(GetWorldPosition(eventData.position));
         }
 
         private Vector3 GetWorldPosition(Vector3 uiPosition)

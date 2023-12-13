@@ -5,19 +5,19 @@ namespace Common.Debug
     public class Slot : MonoBehaviour
     {
         public GridPosition Position { get; private set; }
-        public Item Item { get; private set; }
+        public Tile Tile { get; private set; }
 
-        public Slot SetItem(Item item)
+        public Slot SetItem(Tile tile)
         {
-            Item = item; 
-            item.transform.SetParent(transform, false);
+            Tile = tile; 
+            tile.transform.SetParent(transform, false);
             return this;
         }
 
         public void SetActive(bool active)
         {
             gameObject.SetActive(active);
-            Item?.SetActive(active);
+            Tile?.SetActive(active);
         }
 
         public Slot Initialise(Vector3 position, GridPosition gridPosition)
@@ -25,6 +25,11 @@ namespace Common.Debug
             transform.position = position;
             Position = gridPosition;
             return this;
+        }
+
+        public void ChangePosition(GridPosition position)
+        {
+            Position = position;
         }
     }
 }

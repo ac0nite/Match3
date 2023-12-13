@@ -29,12 +29,17 @@ namespace Common.Debug
                    position.RowIndex < _rowHeight;
         }
 
+        public bool IsEmpty(GridPosition position)
+        {
+            return _slots[position.RowIndex, position.ColumnIndex].Tile == null;
+        }
+
         public bool IsEmptySlot(GridPosition position)
         {
             if (!IsSlot(position))
                 return false;
 
-            return _slots[position.RowIndex, position.ColumnIndex].Item == null;
+            return _slots[position.RowIndex, position.ColumnIndex].Tile == null;
         }
     }
 }

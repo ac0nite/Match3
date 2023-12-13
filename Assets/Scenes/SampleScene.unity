@@ -273,7 +273,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1082218919}
   - component: {fileID: 1082218918}
-  - component: {fileID: 1082218920}
   m_Layer: 0
   m_Name: BoardDebug
   m_TagString: Untagged
@@ -302,7 +301,8 @@ MonoBehaviour:
   - _id: water
     _icon: {fileID: 21300000, guid: a9bcf8c7cf0255e4aab8378e47be9c0d, type: 3}
   _slotPrefab: {fileID: 227217556159814421, guid: e7fabf9e9e49a944d903ce82dbc8aacb, type: 3}
-  _itemPrefab: {fileID: 6520408226805049010, guid: 07f94f3d25100f04186b0ffcbc341752, type: 3}
+  tilePrefab: {fileID: 6520408226805049010, guid: 07f94f3d25100f04186b0ffcbc341752, type: 3}
+  _input: {fileID: 2009623167}
 --- !u!4 &1082218919
 Transform:
   m_ObjectHideFlags: 0
@@ -318,20 +318,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1082218920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082218917}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 101b9c26aa1b4f37a6ee34bee243164b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _input: {fileID: 2009623167}
-  _matchGame: {fileID: 1082218918}
 --- !u!1 &1320643047
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,7 +627,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2009623163}
-  m_CullTransparentMesh: 1
+  m_CullTransparentMesh: 0
 --- !u!114 &2009623167
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Common.Debug
 {
-    public class Item : MonoBehaviour
+    public class Tile : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _renderer;
         public string ID { get; private set; }
@@ -13,7 +13,7 @@ namespace Common.Debug
             _renderer.enabled = active;
         }
 
-        public Item Initialise(IconSpriteModel spriteModel)
+        public Tile Initialise(IconSpriteModel spriteModel)
         {
             _renderer.sprite = spriteModel.Icon;
             ID = spriteModel.Id;
