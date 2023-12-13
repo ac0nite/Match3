@@ -27,5 +27,13 @@ namespace Common.Debug
         {
             return tile;
         }
+
+        public override void Put(Tile item)
+        {
+            item.transform.SetParent(_parent, false);
+            item.SetActive(false);
+            base.Put(item);
+            UnityEngine.Debug.Log($"TilePool: {_pool.Count}");
+        }
     }
 }

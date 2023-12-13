@@ -31,5 +31,13 @@ namespace Common.Debug
         {
             Position = position;
         }
+
+        public bool Match(Slot slot)
+        {
+            if (IsEmpty || slot.IsEmpty) return false;
+            return Tile.ID == slot.Tile.ID;
+        }
+
+        public bool IsEmpty => Tile == null;
     }
 }

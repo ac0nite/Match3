@@ -24,6 +24,7 @@ namespace Common.Debug
 
         public Slot[,] BoardSlot;
         private IGameplay _gameplay;
+        private IMatchingStrategy _matching;
 
         private void Start()
         {
@@ -33,7 +34,8 @@ namespace Common.Debug
             BoardSlot = new Slot[_row, _column];
             Checker = new Checker(BoardSlot);
             Shifting = new ShiftingTile(this);
-            _gameplay = new Gameplay(this, _input, Shifting);
+            _matching = new GeneralMatching(this);
+            _gameplay = new Gameplay(this, _input, Shifting, _matching);
 
             CreateLevel();
             _gameplay.SetActive(true);
@@ -49,10 +51,10 @@ namespace Common.Debug
                 {
                     var position = GetWorldPosition(i, j);
                     var index = UnityEngine.Random.Range(0, _spriteModels.Length);
-                    var item = tilePool.Get().Initialise(_spriteModels[index]);
                     var slot = SlotPool.Get().Initialise(position, new GridPosition(i, j));
                     if (j != _column-1)
                     {
+                        var item = tilePool.Get().Initialise(_spriteModels[index]);
                         slot = slot.SetItem(item);
                     }
                     slot.SetActive(true);
@@ -61,7 +63,28 @@ namespace Common.Debug
                 }
             }
         }
-        
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                for (int i = 0; i < _row; i++)
+                {
+                    for (int j = 0; j < _column; j++)
+                    {
+                        var slot = BoardSlot[i, j];
+                        if(!slot.IsEmpty) 
+                            tilePool.Put(slot.Tile);
+                        SlotPool.Put(slot);
+                    }
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.U))
+            {
+                CreateLevel();
+            }
+        }
+
         private Vector3 GetOriginPosition(int rowCount, int columnCount)
         {
             var offsetY = Mathf.Floor(rowCount / 2.0f) * _tileSize;

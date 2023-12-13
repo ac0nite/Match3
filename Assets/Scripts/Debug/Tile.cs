@@ -10,6 +10,7 @@ namespace Common.Debug
 
         public void SetActive(bool active)
         {
+            gameObject.SetActive(active);
             _renderer.enabled = active;
         }
 

@@ -16,12 +16,14 @@ namespace Common.Debug
         
         private GridPosition _beginPositionGrid;
         private GridPosition _endPositionGrid;
+        private readonly IMatchingStrategy _findMatch;
 
-        public Gameplay(MatchGame match, IInputSystem input, ShiftingTile shifting)
+        public Gameplay(MatchGame match, IInputSystem input, ShiftingTile shifting, IMatchingStrategy findMatch)
         {
             _match = match;
             _input = input;
             _shifting = shifting;
+            _findMatch = findMatch;
         }
 
         public void SetActive(bool active)
@@ -47,6 +49,8 @@ namespace Common.Debug
             {
                 UnityEngine.Debug.Log($"Begin grid:{_beginPositionGrid} slot:{_match.BoardSlot[_beginPositionGrid.RowIndex, _beginPositionGrid.ColumnIndex].Position}");   
             }
+            
+            //UnityEngine.Debug.Log($"grid:{_beginPositionGrid} IsEmptySlot:{_match.Checker.IsEmptySlot(_beginPositionGrid)}");   
 
             //Debug_matchGame.Slots[grid.RowIndex, grid.ColumnIndex]
         }
@@ -87,6 +91,8 @@ namespace Common.Debug
             
             _shifting.Shift(_beginPositionGrid, _endPositionGrid, () =>
             {
+                _findMatch.FindMatches();
+                
                 _beginPositionGrid = GridPosition.Empty;
                 _endPositionGrid = GridPosition.Empty;
                 _input.Lock = false;

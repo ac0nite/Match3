@@ -37,9 +37,9 @@ namespace Common.Debug
         public bool IsEmptySlot(GridPosition position)
         {
             if (!IsSlot(position))
-                return false;
+                return true;
 
-            return _slots[position.RowIndex, position.ColumnIndex].Tile == null;
+            return _slots[position.RowIndex, position.ColumnIndex].IsEmpty;
         }
     }
 }

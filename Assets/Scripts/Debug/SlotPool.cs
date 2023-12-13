@@ -27,5 +27,11 @@ namespace Common.Debug
         {
             return item;
         }
+
+        public override void Put(Slot item)
+        {
+            item.SetActive(false);
+            base.Put(item);
+        }
     }
 }

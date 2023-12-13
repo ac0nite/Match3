@@ -11,7 +11,7 @@ namespace Common
     }
     public abstract class BasePool<T> : IPool<T>
     {
-        private Queue<T> _pool;
+        protected Queue<T> _pool;
         private readonly int _capacity;
 
         protected BasePool(int capacity)
@@ -34,7 +34,7 @@ namespace Common
             return Configure(_pool.Dequeue());
         }
 
-        public void Put(T item)
+        public virtual void Put(T item)
         {
             _pool.Enqueue(item);
         }
