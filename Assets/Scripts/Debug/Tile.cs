@@ -14,6 +14,11 @@ namespace Common.Debug
             _renderer.enabled = active;
         }
 
+        public void SetColor(Color color)
+        {
+            _renderer.color = color;
+        }
+
         public Tile Initialise(IconSpriteModel spriteModel)
         {
             _renderer.sprite = spriteModel.Icon;

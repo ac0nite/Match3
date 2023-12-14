@@ -24,7 +24,8 @@ namespace Common.Debug
 
         public Slot[,] BoardSlot;
         private IGameplay _gameplay;
-        private IMatchingStrategy _matching;
+        private IMatching _matching;
+        private IClearingBoard _cleaner;
 
         private void Start()
         {
@@ -34,11 +35,20 @@ namespace Common.Debug
             BoardSlot = new Slot[_row, _column];
             Checker = new Checker(BoardSlot);
             Shifting = new ShiftingTile(this);
-            _matching = new GeneralMatching(this);
-            _gameplay = new Gameplay(this, _input, Shifting, _matching);
+            //_matching = new GeneralMatching(this);
+            _matching = new DebugMatching(this, Checker);
+            _cleaner = new ClearingBoard(this);
+            _gameplay = new Gameplay(this, _input, Shifting, _matching, _cleaner);
 
             CreateLevel();
             _gameplay.SetActive(true);
+        }
+
+
+        public void CleanSlot(Slot slot)
+        {
+            tilePool.Put(slot.Tile);
+            slot.Clean();
         }
 
         private void CreateLevel()

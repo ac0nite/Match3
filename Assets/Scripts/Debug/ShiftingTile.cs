@@ -29,5 +29,10 @@ namespace Common.Debug
                 callback?.Invoke();
             });
         }
+
+        public void AllShift()
+        {
+            
+        }
     }
 }

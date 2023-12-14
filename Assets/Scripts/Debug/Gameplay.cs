@@ -16,14 +16,16 @@ namespace Common.Debug
         
         private GridPosition _beginPositionGrid;
         private GridPosition _endPositionGrid;
-        private readonly IMatchingStrategy _findMatch;
+        private readonly IMatching _findMatch;
+        private readonly IClearingBoard _cleaner;
 
-        public Gameplay(MatchGame match, IInputSystem input, ShiftingTile shifting, IMatchingStrategy findMatch)
+        public Gameplay(MatchGame match, IInputSystem input, ShiftingTile shifting, IMatching findMatch, IClearingBoard clearingBoard)
         {
             _match = match;
             _input = input;
             _shifting = shifting;
             _findMatch = findMatch;
+            _cleaner = clearingBoard;
         }
 
         public void SetActive(bool active)
@@ -91,12 +93,24 @@ namespace Common.Debug
             
             _shifting.Shift(_beginPositionGrid, _endPositionGrid, () =>
             {
-                _findMatch.FindMatches();
-                
-                _beginPositionGrid = GridPosition.Empty;
-                _endPositionGrid = GridPosition.Empty;
-                _input.Lock = false;
+                TryToMatchesAndShifting(() =>
+                {
+                    _beginPositionGrid = GridPosition.Empty;
+                    _endPositionGrid = GridPosition.Empty;
+                    _input.Lock = false;
+                });
             });
+        }
+
+        private void TryToMatchesAndShifting(Action callback)
+        {
+            while (_findMatch.FindMatches())
+            {
+                _cleaner.Clean(null);
+            }
+
+            _shifting.AllShift();
+            callback?.Invoke();
         }
     }
 }

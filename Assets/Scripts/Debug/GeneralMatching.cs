@@ -3,12 +3,12 @@ using System.Linq;
 
 namespace Common.Debug
 {
-    public interface IMatchingStrategy
+    public interface IMatching
     {
-        List<List<GridPosition>> FindMatches();
+        bool FindMatches();
     }
     
-    public class GeneralMatching : IMatchingStrategy
+    public class GeneralMatching : IMatching
     {
         private readonly MatchGame _match;
         private readonly int _column;
@@ -23,7 +23,7 @@ namespace Common.Debug
             _column = _match.BoardSlot.GetLength(1);
         }
 
-        public List<List<GridPosition>> FindMatches()
+        public bool FindMatches()
         {
             List<List<GridPosition>> matches = new List<List<GridPosition>>();
 
@@ -52,7 +52,7 @@ namespace Common.Debug
                 }
             }
 
-            return matches;
+            return false;
         }
 
         private List<GridPosition> FindHorizontalMatch(int row, int col)

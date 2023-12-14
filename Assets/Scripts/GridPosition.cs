@@ -49,6 +49,12 @@
         public static GridPosition Empty => new GridPosition(-1, -1);
         public bool IsEmpty => RowIndex < 0 && ColumnIndex < 0;
 
+        public GridPosition Up => new GridPosition(RowIndex - 1, ColumnIndex);
+        public GridPosition Down => new GridPosition(RowIndex + 1, ColumnIndex);
+        public GridPosition Left => new GridPosition(RowIndex, ColumnIndex - 1);
+        public GridPosition Right => new GridPosition(RowIndex, ColumnIndex + 1);
+
+
         public override string ToString()
         {
             return $"[{RowIndex}, {ColumnIndex}]";

@@ -7,10 +7,13 @@ namespace Common.Debug
         public GridPosition Position { get; private set; }
         public Tile Tile { get; private set; }
 
+        public bool IsMatch { get; set; }
+
         public Slot SetItem(Tile tile)
         {
             Tile = tile; 
             tile.transform.SetParent(transform, false);
+            IsMatch = false;
             return this;
         }
 
@@ -39,5 +42,12 @@ namespace Common.Debug
         }
 
         public bool IsEmpty => Tile == null;
+        public override string ToString() => IsEmpty ? $"[null] {Position}" : $"[{Tile.ID}] {Position}";
+
+        public void Clean()
+        {
+            Tile = null;
+            IsMatch = false;
+        }
     }
 }
