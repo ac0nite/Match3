@@ -20,7 +20,7 @@ namespace Common.Debug
         public SlotPool SlotPool;
         public TilePool tilePool;
         public Checker Checker;
-        public ShiftingTile Shifting;
+        public ShiftingSlot Shifting;
 
         public Slot[,] BoardSlot;
         private IGameplay _gameplay;
@@ -34,7 +34,7 @@ namespace Common.Debug
             tilePool = new TilePool(tilePrefab, capacity);
             BoardSlot = new Slot[_row, _column];
             Checker = new Checker(BoardSlot);
-            Shifting = new ShiftingTile(this);
+            Shifting = new ShiftingSlot(this, Checker);
             //_matching = new GeneralMatching(this);
             _matching = new DebugMatching(this, Checker);
             _cleaner = new ClearingBoard(this);
@@ -62,11 +62,14 @@ namespace Common.Debug
                     var position = GetWorldPosition(i, j);
                     var index = UnityEngine.Random.Range(0, _spriteModels.Length);
                     var slot = SlotPool.Get().Initialise(position, new GridPosition(i, j));
-                    if (j != _column-1)
-                    {
-                        var item = tilePool.Get().Initialise(_spriteModels[index]);
-                        slot = slot.SetItem(item);
-                    }
+                    // if (j != _column-1)
+                    // {
+                    //     var item = tilePool.Get().Initialise(_spriteModels[index]);
+                    //     slot = slot.SetItem(item);
+                    // }
+                    
+                    var item = tilePool.Get().Initialise(_spriteModels[index]);
+                    slot = slot.SetItem(item);
                     slot.SetActive(true);
 
                     BoardSlot[i, j] = slot;
@@ -92,6 +95,10 @@ namespace Common.Debug
             else if (Input.GetKeyDown(KeyCode.U))
             {
                 CreateLevel();
+            }
+            else if (Input.GetKeyDown(KeyCode.G))
+            {
+                Shifting.AllShift();
             }
         }
 

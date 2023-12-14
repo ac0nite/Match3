@@ -12,14 +12,14 @@ namespace Common.Debug
     {
         private readonly IInputSystem _input;
         private readonly MatchGame _match;
-        private readonly ShiftingTile _shifting;
+        private readonly ShiftingSlot _shifting;
         
         private GridPosition _beginPositionGrid;
         private GridPosition _endPositionGrid;
         private readonly IMatching _findMatch;
         private readonly IClearingBoard _cleaner;
 
-        public Gameplay(MatchGame match, IInputSystem input, ShiftingTile shifting, IMatching findMatch, IClearingBoard clearingBoard)
+        public Gameplay(MatchGame match, IInputSystem input, ShiftingSlot shifting, IMatching findMatch, IClearingBoard clearingBoard)
         {
             _match = match;
             _input = input;
@@ -104,12 +104,20 @@ namespace Common.Debug
 
         private void TryToMatchesAndShifting(Action callback)
         {
-            while (_findMatch.FindMatches())
+            _findMatch.FindMatches();
+            do
             {
-                _cleaner.Clean(null);
-            }
-
-            _shifting.AllShift();
+                _cleaner.Clean(() => _shifting.AllShift());
+            } 
+            while (_findMatch.FindMatches());
+            
+            // while (_findMatch.FindMatches())
+            // {
+            //     _findMatch.FindMatches();
+            //     _cleaner.Clean(() => _shifting.AllShift());
+            // }
+            //
+            // _shifting.AllShift();
             callback?.Invoke();
         }
     }
