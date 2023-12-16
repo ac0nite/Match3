@@ -1,0 +1,42 @@
+﻿using Common;
+using Match3.General;
+using UnityEngine;
+
+namespace Match3.Pool
+{
+    public class TilePool : BasePool<Tile>
+    {
+        private readonly Tile _prefab;
+        private readonly Transform _parent;
+        private Tile _cashTile;
+
+        public TilePool(Tile prefab, int capacity) : base(capacity)
+        {
+            _prefab = prefab;
+            _parent = new GameObject($"{prefab.name}Pool").transform;
+            
+            Initialise();
+        }
+
+        public override Tile Create()
+        {
+            _cashTile = UnityEngine.GameObject.Instantiate(_prefab, _parent);
+            _cashTile.SetActive(false);
+            return _cashTile;
+        }
+
+        public override Tile Configure(Tile tile)
+        {
+            UnityEngine.Debug.Log($"get: {_pool.Count}");
+            return tile;
+        }
+
+        public override void Put(Tile item)
+        {
+            item.transform.SetParent(_parent, false);
+            item.SetActive(false);
+            base.Put(item);
+            UnityEngine.Debug.Log($"put: {_pool.Count}");
+        }
+    }
+}
