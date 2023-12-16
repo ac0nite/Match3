@@ -20,12 +20,13 @@ namespace Common
         public event Action<Vector3> PointerDown;
         public event Action<Vector3> PointerDrag;
         public event Action<Vector3> PointerUp;
+        public bool Lock { get; set; }
 
-        public bool Lock
-        {
-            get => !_inputImage.raycastTarget; 
-            set => _inputImage.raycastTarget = !value;
-        }
+        // public bool Lock
+        // {
+        //     get => !_inputImage.raycastTarget; 
+        //     set => _inputImage.raycastTarget = !value;
+        // }
         
         public void OnPointerDown(PointerEventData eventData)
         {

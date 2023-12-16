@@ -11,8 +11,8 @@ namespace Common
     public struct Settings
     {
         public BoardParam BoardParam;
+        public AnimationSettings Animation;
         public IconSpriteModel[] SpriteModels;
-        public float ShiftingAnimationTime;
     }
     
     [Serializable]
@@ -22,6 +22,14 @@ namespace Common
         public int Column;
         public float TileSize;
         public int Capacity => Row * Column;
+    }
+
+    [Serializable]
+    public struct AnimationSettings
+    {
+        public float ShiftingTime;
+        public float DestroySpeed;
+        
     }
     public class ApplicationContext : MonoBehaviour
     {

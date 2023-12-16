@@ -34,6 +34,9 @@ namespace Match3.Board
 
         public bool IsEmptySlot(GridPosition position)
         {
+            if (position.IsEmpty)
+                return false;
+            
             if (!IsSlot(position))
                 return true;
 

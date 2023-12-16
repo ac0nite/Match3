@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Debug;
 using Match3.Board;
 using UnityEngine;
@@ -74,12 +76,13 @@ namespace Common.Debug
                 if (_beginPositionGrid.IsSides(_endPositionGrid) || _beginPositionGrid.IsDown(_endPositionGrid))
                 {
                     UnityEngine.Debug.Log($"SIDES AND DOWN {_endPositionGrid.ToString()}");
-                    Shift();
+                    UpdateBoardAsync();
                 }
                 else if(_beginPositionGrid.IsUp(_endPositionGrid) && !_validator.IsEmpty(_endPositionGrid))
                 {
                     UnityEngine.Debug.Log($"UP {_endPositionGrid.ToString()}");
-                    Shift();
+                    // Shift();
+                    UpdateBoardAsync();
                 }
                 else
                 {
@@ -87,6 +90,35 @@ namespace Common.Debug
                     UnityEngine.Debug.Log($"-");
                 }
             }
+        }
+
+        private async void UpdateBoardAsync()
+        {
+            Log($"UpdateBoardAsync begin");
+            _input.Lock = true;
+            await _shifting.Shift(_beginPositionGrid, _endPositionGrid);
+            Log($"after shift");
+
+            _matching.Find();
+            do
+            {
+                await _cleaning.ExecuteAsync();
+                await _shifting.AllShiftAsync();
+                // await UniTask.Delay(100);
+            } 
+            while (_matching.Find());
+            
+            
+            _beginPositionGrid = GridPosition.Empty;
+            _endPositionGrid = GridPosition.Empty;
+            _input.Lock = false;
+            
+            Log($"UpdateBoardAsync end");
+        }
+
+        private void Log(string message)
+        {
+            UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] {message}");
         }
 
         private void Shift()

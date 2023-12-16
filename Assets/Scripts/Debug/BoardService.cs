@@ -1,6 +1,7 @@
 using System;
 using Common;
 using Common.Debug;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Debug
@@ -12,7 +13,7 @@ namespace Debug
         GridPosition GetGridPositionByPointer(Vector3 worldPointerPosition);
         Vector3 GetWorldPosition(int rowIndex, int columnIndex);
         int OrderLayer(int rowIndex, int columnIndex);
-        void CleanSlot(Slot slot);
+        UniTask CleanSlot(Slot slot);
     }
     
     public class BoardService : IBoardService
@@ -21,11 +22,14 @@ namespace Debug
         private BoardParam _boardParam;
         private Vector3 _originalPosition;
         private readonly IPool<Tile> _tilePool;
+        private readonly float _destroyAnimationSpeed;
 
         public BoardService(ApplicationContext context)
         {
             _boardModel = context.Resolve<IBoardModel>();
             _tilePool = context.Resolve<IPool<Tile>>();
+            
+            _destroyAnimationSpeed = context.Settings.Animation.DestroySpeed;
         }
 
         public void Initialise(BoardParam boardParam)
@@ -45,8 +49,9 @@ namespace Debug
             return _boardModel.Row * _boardModel.Column - _boardModel.Column * (rowIndex + 1) + 1 + columnIndex;
         }
 
-        public void CleanSlot(Slot slot)
+        public async UniTask CleanSlot(Slot slot)
         {
+            await slot.Tile.PlayDestroyAnimationAsync(_destroyAnimationSpeed);
             _tilePool.Put(slot.Tile);
             slot.Clear();
         }

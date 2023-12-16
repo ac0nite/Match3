@@ -1,5 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Common.Debug
 {
@@ -33,6 +37,21 @@ namespace Common.Debug
             ID = spriteModel.Id;
             
             return this;
+        }
+
+        public UniTask PlayDestroyAnimationAsync(float speed)
+        {
+            UnityEngine.Debug.Log($"PlayDestroyAnimationAsync begin");
+            
+            var utcs = new UniTaskCompletionSource();
+            
+            _animation.PlayDestroy(speed);
+            _animation.OnDestroyEndedAnimationDelegate = () =>
+            {
+                UnityEngine.Debug.Log($"PlayDestroyAnimationAsync end", transform.parent);
+                utcs.TrySetResult();
+            };
+            return utcs.Task;
         }
     }
 }

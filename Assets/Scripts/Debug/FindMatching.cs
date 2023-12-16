@@ -30,6 +30,7 @@ namespace Common.Debug
                 }
             }
 
+            UnityEngine.Debug.Log($"Find: {isMatch}");
             return isMatch;
         }
 
