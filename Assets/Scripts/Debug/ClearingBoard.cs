@@ -1,26 +1,29 @@
 ﻿using System;
+using Debug;
 
 namespace Common.Debug
 {
-    public interface IClearingBoard
+    public interface ICleaningBoard
     {
-        void Clean(Action callback);
+        void Execute(Action callback);
     }
     
-    public class ClearingBoard : IClearingBoard
+    public class ClearingBoard : ICleaningBoard
     {
-        private readonly MatchGame _matchGame;
+        private readonly IBoardModel _board;
+        private readonly IBoardService _boardService;
 
-        public ClearingBoard(MatchGame matchGame)
+        public ClearingBoard(ApplicationContext context)
         {
-            _matchGame = matchGame;
+            _board = context.Resolve<IBoardModel>();
+            _boardService = context.Resolve<IBoardService>();
         }
-        public void Clean(Action callback)
+        public void Execute(Action callback)
         {
-            foreach (var slot in _matchGame.BoardSlot)
+            foreach (var slot in _board.Slots)
             {
                 if(slot.IsMatch) 
-                    _matchGame.CleanSlot(slot);
+                    _boardService.CleanSlot(slot);
             }
             
             callback?.Invoke();

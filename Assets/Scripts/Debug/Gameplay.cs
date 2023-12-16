@@ -1,4 +1,6 @@
 ﻿using System;
+using Debug;
+using Match3.Board;
 using UnityEngine;
 
 namespace Common.Debug
@@ -11,21 +13,26 @@ namespace Common.Debug
     public class Gameplay : IGameplay
     {
         private readonly IInputSystem _input;
-        private readonly MatchGame _match;
-        private readonly ShiftingSlot _shifting;
+
+        private readonly IMatching _matching;
+        private readonly IBoardService _boardService;
+        private readonly IValidator _validator;
+        private readonly ICleaningBoard _cleaning;
+        private readonly IBoardModel _board;
+        private readonly IShiftingSlots _shifting;
         
         private GridPosition _beginPositionGrid;
         private GridPosition _endPositionGrid;
-        private readonly IMatching _findMatch;
-        private readonly IClearingBoard _cleaner;
 
-        public Gameplay(MatchGame match, IInputSystem input, ShiftingSlot shifting, IMatching findMatch, IClearingBoard clearingBoard)
+        public Gameplay(ApplicationContext context)
         {
-            _match = match;
-            _input = input;
-            _shifting = shifting;
-            _findMatch = findMatch;
-            _cleaner = clearingBoard;
+            _input = context.Resolve<IInputSystem>();
+            _board = context.Resolve<IBoardModel>();
+            _boardService = context.Resolve<IBoardService>();
+            _validator = context.Resolve<IValidator>();
+            _cleaning = context.Resolve<ICleaningBoard>();
+            _shifting = context.Resolve<IShiftingSlots>();
+            _matching = context.Resolve<IMatching>();
         }
 
         public void SetActive(bool active)
@@ -44,17 +51,13 @@ namespace Common.Debug
 
         private void TryToCheckSlot(Vector3 worldPosition)
         {
-            _beginPositionGrid = _match.GetGridPositionByPointer(worldPosition);
-            if (_match.Checker.IsEmptySlot(_beginPositionGrid))
+            _beginPositionGrid = _boardService.GetGridPositionByPointer(worldPosition);
+            if (_validator.IsEmptySlot(_beginPositionGrid))
                 _beginPositionGrid = GridPosition.Empty;
             else
             {
-                UnityEngine.Debug.Log($"Begin grid:{_beginPositionGrid} slot:{_match.BoardSlot[_beginPositionGrid.RowIndex, _beginPositionGrid.ColumnIndex].Position}");   
+                UnityEngine.Debug.Log($"Begin grid:{_beginPositionGrid} slot:{_board.Slots[_beginPositionGrid.RowIndex, _beginPositionGrid.ColumnIndex].Position}");   
             }
-            
-            //UnityEngine.Debug.Log($"grid:{_beginPositionGrid} IsEmptySlot:{_match.Checker.IsEmptySlot(_beginPositionGrid)}");   
-
-            //Debug_matchGame.Slots[grid.RowIndex, grid.ColumnIndex]
         }
         
         private void TryToNextCheckSlot(Vector3 worldPosition)
@@ -64,17 +67,16 @@ namespace Common.Debug
                 return;
             }
             
-            _endPositionGrid = _match.GetGridPositionByPointer(worldPosition);
+            _endPositionGrid = _boardService.GetGridPositionByPointer(worldPosition);
 
-            if (_match.Checker.IsSlot(_endPositionGrid))
+            if (_validator.IsSlot(_endPositionGrid))
             {
-                //UnityEngine.Debug.Log($"SIDES LEFT:{_beginPositionGrid.IsLeft(_endPositionGrid)} RIGHT:{_beginPositionGrid.IsRight(_endPositionGrid)} {_endPositionGrid.ToString()}");
                 if (_beginPositionGrid.IsSides(_endPositionGrid) || _beginPositionGrid.IsDown(_endPositionGrid))
                 {
                     UnityEngine.Debug.Log($"SIDES AND DOWN {_endPositionGrid.ToString()}");
                     Shift();
                 }
-                else if(_beginPositionGrid.IsUp(_endPositionGrid) && !_match.Checker.IsEmpty(_endPositionGrid))
+                else if(_beginPositionGrid.IsUp(_endPositionGrid) && !_validator.IsEmpty(_endPositionGrid))
                 {
                     UnityEngine.Debug.Log($"UP {_endPositionGrid.ToString()}");
                     Shift();
@@ -104,12 +106,13 @@ namespace Common.Debug
 
         private void TryToMatchesAndShifting(Action callback)
         {
-            _findMatch.FindMatches();
+            var isMatch = _matching.Find();
+            UnityEngine.Debug.Log(isMatch);
             do
             {
-                _cleaner.Clean(() => _shifting.AllShift());
+                _cleaning.Execute(() => _shifting.AllShift());
             } 
-            while (_findMatch.FindMatches());
+            while (_matching.Find());
             
             // while (_findMatch.FindMatches())
             // {

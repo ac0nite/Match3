@@ -6,33 +6,31 @@ namespace Common.Debug
     {
         public GridPosition Position { get; private set; }
         public Tile Tile { get; private set; }
-
         public bool IsMatch { get; set; }
-
-        public Slot SetItem(Tile tile)
-        {
-            Tile = tile; 
-            tile.transform.SetParent(transform, false);
-            IsMatch = false;
-            return this;
-        }
 
         public void SetActive(bool active)
         {
             gameObject.SetActive(active);
             Tile?.SetActive(active);
         }
-
-        public Slot Initialise(Vector3 position, GridPosition gridPosition)
-        {
-            transform.position = position;
-            Position = gridPosition;
-            return this;
-        }
-
-        public void ChangePosition(GridPosition position)
+        
+        public void SetGridPosition(GridPosition position)
         {
             Position = position;
+            Tile?.UpdateOrder(Position.RowRenderer);
+        }
+        
+        public void SetForceWorldPosition(Vector3 worldPosition)
+        {
+            transform.position = worldPosition;
+        }
+        
+        public void SetTile(Tile tile)
+        {
+            Clear();
+            
+            Tile = tile;
+            Tile.Bind(transform, Position.RowRenderer);
         }
 
         public bool Match(Slot slot)
@@ -42,12 +40,12 @@ namespace Common.Debug
         }
 
         public bool IsEmpty => Tile == null;
-        public override string ToString() => IsEmpty ? $"[null] {Position}" : $"[{Tile.ID}] {Position}";
-
-        public void Clean()
+        
+        public void Clear()
         {
             Tile = null;
             IsMatch = false;
         }
+        public override string ToString() => IsEmpty ? $"[null] {Position}" : $"[{Tile.ID}] {Position}";
     }
 }

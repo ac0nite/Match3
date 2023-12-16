@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace Common
 {
-    public interface IPool<T>
-    {
-        T Get();
-        void Put(T item);
-    }
     public abstract class BasePool<T> : IPool<T>
     {
         protected Queue<T> _pool;

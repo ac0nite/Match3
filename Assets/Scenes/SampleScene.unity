@@ -123,54 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &194032730
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 194032731}
-  - component: {fileID: 194032732}
-  m_Layer: 0
-  m_Name: Board
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &194032731
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194032730}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &194032732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194032730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85193d34be014ec298d557ff6be5f57a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rowCount: 3
-  _columnCount: 3
-  _tileSize: 0.5
-  _gridSlotPrefab: {fileID: 2744869529880500060, guid: e64d139cbe6ad304aa732c36cdca3a2f, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,7 +226,7 @@ GameObject:
   - component: {fileID: 1082218919}
   - component: {fileID: 1082218918}
   m_Layer: 0
-  m_Name: BoardDebug
+  m_Name: Gameplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -292,17 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee7e057fa5014277858e82e52947bc5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _row: 6
-  _column: 4
-  _tileSize: 0.9
-  _spriteModels:
-  - _id: fire
-    _icon: {fileID: 21300000, guid: 923f6dd526931034ea4d6919c94c6bff, type: 3}
-  - _id: water
-    _icon: {fileID: 21300000, guid: a9bcf8c7cf0255e4aab8378e47be9c0d, type: 3}
-  _slotPrefab: {fileID: 227217556159814421, guid: e7fabf9e9e49a944d903ce82dbc8aacb, type: 3}
-  tilePrefab: {fileID: 6520408226805049010, guid: 07f94f3d25100f04186b0ffcbc341752, type: 3}
-  _input: {fileID: 2009623167}
+  _applicationContext: {fileID: 1657194945}
 --- !u!4 &1082218919
 Transform:
   m_ObjectHideFlags: 0
@@ -498,9 +440,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1657194946}
   - component: {fileID: 1657194945}
-  - component: {fileID: 1657194947}
   m_Layer: 0
-  m_Name: Application
+  m_Name: ApplicationContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -518,13 +459,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc6ec9d135a4ffda08a6781be9b61e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Settings:
+    BoardParam:
+      Row: 3
+      Column: 3
+      TileSize: 1
+    SpriteModels:
+    - _id: water
+      _animatorController: {fileID: 9100000, guid: befab51d24cf54b7d808a3ef358de86f, type: 2}
+    - _id: fire
+      _animatorController: {fileID: 9100000, guid: 091bb637c307a4db6bf77221202dd8ba, type: 2}
   _inputSystem: {fileID: 2009623167}
-  _gameplayBoard: {fileID: 194032732}
-  _icons:
-  - _id: 
-    _icon: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
-  - _id: 
-    _icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  _slotPrefab: {fileID: 227217556159814421, guid: e7fabf9e9e49a944d903ce82dbc8aacb, type: 3}
+  _tilePrefab: {fileID: 6520408226805049010, guid: 07f94f3d25100f04186b0ffcbc341752, type: 3}
 --- !u!4 &1657194946
 Transform:
   m_ObjectHideFlags: 0
@@ -540,18 +487,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1657194947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1657194944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68a58ad740cf477cbfffde0ff010fdee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2009623163
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,5 +585,4 @@ SceneRoots:
   - {fileID: 1320643051}
   - {fileID: 1623091928}
   - {fileID: 1657194946}
-  - {fileID: 194032731}
   - {fileID: 1082218919}

@@ -7,9 +7,9 @@ namespace Common
     public class IconSpriteModel
     {
         [SerializeField] private string _id;
-        [SerializeField] private Sprite _icon;
+        [SerializeField] private RuntimeAnimatorController _animatorController;
 
         public string Id => _id;
-        public Sprite Icon => _icon;
+        public RuntimeAnimatorController AnimatorController => _animatorController;
     }
 }
