@@ -17,12 +17,15 @@ namespace Common.Debug
         private readonly IBoardService _boardService;
         
         private Slot _cashedSlot;
+        private readonly float _animationTime;
 
         public ShiftingSlots(ApplicationContext context)
         {
             _board = context.Resolve<IBoardModel>();
             _boardService = context.Resolve<IBoardService>();
             _validator = context.Resolve<IValidator>();
+            
+            _animationTime = context.Settings.ShiftingAnimationTime;
         }
         public void Shift(GridPosition begin, GridPosition end, Action callback)
         {
@@ -31,21 +34,20 @@ namespace Common.Debug
 
             var oneSlot = _board.Slots[begin.RowIndex, begin.ColumnIndex];
             var twoSlot = _board.Slots[end.RowIndex, end.ColumnIndex];
-            
-            UnityEngine.Debug.Log($"{oneSlot.Position} <-> {twoSlot.Position}");
 
-            _board.Slots[begin.RowIndex, begin.ColumnIndex].SetGridPosition(twoSlot.Position);
-            _board.Slots[end.RowIndex, end.ColumnIndex].SetGridPosition(oneSlot.Position);
+            var bPos = oneSlot.Position;
+            var ePos= twoSlot.Position;
+
+            _board.Slots[begin.RowIndex, begin.ColumnIndex].SetGridPosition(ePos);
+            _board.Slots[end.RowIndex, end.ColumnIndex].SetGridPosition(bPos);
             
             
             (_board.Slots[begin.RowIndex, begin.ColumnIndex], _board.Slots[end.RowIndex, end.ColumnIndex]) = 
                 (_board.Slots[end.RowIndex, end.ColumnIndex], _board.Slots[begin.RowIndex, begin.ColumnIndex]);
             
-            oneSlot.transform.DOMove(to, 0.3f);
-            twoSlot.transform.DOMove(from, 0.3f).OnComplete(() =>
+            oneSlot.transform.DOMove(to, _animationTime);
+            twoSlot.transform.DOMove(from, _animationTime).OnComplete(() =>
             {
-                //(oneSlot, twoSlot) = (twoSlot, oneSlot);
-                // (_match.BoardSlot[begin.RowIndex, begin.ColumnIndex], _match.BoardSlot[end.RowIndex, end.ColumnIndex]) = (_match.BoardSlot[end.RowIndex, end.ColumnIndex], _match.BoardSlot[begin.RowIndex, begin.ColumnIndex]);
                 callback?.Invoke();
             });
         }

@@ -12,6 +12,7 @@ namespace Common
     {
         public BoardParam BoardParam;
         public IconSpriteModel[] SpriteModels;
+        public float ShiftingAnimationTime;
     }
     
     [Serializable]

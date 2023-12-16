@@ -4,27 +4,20 @@
     {
         public int RowIndex { get; private set; }
         public int ColumnIndex { get; private set; }
-        public int RowRenderer { get; private set; }
+        public int OrderIndex { get; private set; }
 
         public GridPosition(int rowIndex, int columnIndex)
         {
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
-            RowRenderer = -1;
+            OrderIndex = -1;
         }
         
-        public GridPosition(int rowIndex, int columnIndex, int rowRenderer)
+        public GridPosition(int rowIndex, int columnIndex, int orderIndex)
         {
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
-            RowRenderer = rowRenderer;
-        }
-
-        public void Change(GridPosition position)
-        {
-            ColumnIndex = position.ColumnIndex;
-            RowIndex = position.RowIndex;
-            RowRenderer = position.RowRenderer;
+            OrderIndex = orderIndex;
         }
 
         public bool IsUp(GridPosition position)
@@ -66,7 +59,7 @@
 
         public override string ToString()
         {
-            return $"[{RowIndex}, {ColumnIndex}] [{RowRenderer}]";
+            return $"[{RowIndex}, {ColumnIndex}] [{OrderIndex}]";
         }
     }
 }

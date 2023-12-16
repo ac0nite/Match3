@@ -17,7 +17,7 @@ namespace Common.Debug
         public void SetGridPosition(GridPosition position)
         {
             Position = position;
-            Tile?.UpdateOrder(Position.RowRenderer);
+            Tile?.UpdateOrder(Position.OrderIndex);
         }
         
         public void SetForceWorldPosition(Vector3 worldPosition)
@@ -30,7 +30,7 @@ namespace Common.Debug
             Clear();
             
             Tile = tile;
-            Tile.Bind(transform, Position.RowRenderer);
+            Tile.Bind(transform, Position.OrderIndex);
         }
 
         public bool Match(Slot slot)
