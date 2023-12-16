@@ -1,41 +1,14 @@
-﻿using System;
-using Debug;
-using Match3.Board;
+﻿using Debug;
 using UnityEngine;
 
 namespace Common.Debug
 {
     public class MatchGame : MonoBehaviour
     {
-        // [SerializeField] private int _row;
-        // [SerializeField] private int _column;
-        // [SerializeField] private float _tileSize = 0.6f;
-        //
-        // [SerializeField] private IconSpriteModel[] _spriteModels;
-        // [SerializeField] private Slot _slotPrefab;
-        // [SerializeField] private Tile tilePrefab;
-        //
-        // [SerializeField] private InputSystem _input;
-
         [SerializeField] private ApplicationContext _applicationContext;
         private IBoardRenderer _boardRenderer;
         private IGameplay _gamePlay;
-
-        // private Vector3 _originalPosition;
-        // public SlotPool SlotPool;
-        // public TilePool tilePool;
-        // public SlotValidator SlotValidator;
-        // public ShiftingSlots Shifting;
-        //
-        // public Slot[,] BoardSlot;
-        // private IGameplay _gameplay;
-        // private IMatching _matching;
-        // private IClearingBoard _cleaner;
-        // private IBoardModel _board;
-        //
-        // private IPool<Slot> _slotPool;
-        // private IPool<Tile> _tilePool;
-        // private IBoardService _boardService;
+        private IStateMachine<BaseState> _stateMachine;
 
         private void Awake()
         {
@@ -44,21 +17,15 @@ namespace Common.Debug
 
         private void Start()
         {
-            // _slotPool = _applicationContext.Resolve<IPool<Slot>>();
-            // _tilePool = _applicationContext.Resolve<IPool<Tile>>();
-            // _boardService = _applicationContext.Resolve<IBoardService>();
+            _stateMachine = _applicationContext.Resolve<IStateMachine<BaseState>>();
+            _stateMachine.Next<InitialiseState>();
+
+            // _boardRenderer = _applicationContext.Resolve<IBoardRenderer>();
+            // _boardRenderer.Create();
+            // _boardRenderer.Random();
             //
-            // _boardService.Initialise(_applicationContext.BoardParam);
-
-            // CreateLevel();
-            // _gameplay.SetActive(true);
-
-            _boardRenderer = _applicationContext.Resolve<IBoardRenderer>();
-            _boardRenderer.Create();
-            _boardRenderer.Random();
-
-            _gamePlay = _applicationContext.Resolve<IGameplay>();
-            _gamePlay.SetActive(true);
+            // _gamePlay = _applicationContext.Resolve<IGameplay>();
+            // _gamePlay.SetActive(true);
         }
 
         // private void CreateLevel()

@@ -48,11 +48,5 @@ namespace Common.Debug
         {
             OnDestroyEndedAnimationDelegate?.Invoke();
         }
-        
-        [ContextMenu("ChangeSpeed")]
-        public void ChangeSpeed()
-        {
-            _animator.SetFloat(AnimationId.Speed, _animator.GetFloat(AnimationId.Speed) - 0.1f);
-        }
     }
 }

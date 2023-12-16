@@ -7,6 +7,7 @@ namespace Debug
     {
         void Create();
         void Random();
+        void Clear();
     }
     
     public class BordRenderer : IBoardRenderer
@@ -29,7 +30,6 @@ namespace Debug
         public void Create()
         {
             _boardService.Initialise(_settings.BoardParam);
-            int sortingOrder = _settings.BoardParam.Capacity;
             for (int i = 0; i < _board.Row; i++)
             {
                 for (int j = 0; j < _board.Column; j++)
@@ -39,53 +39,46 @@ namespace Debug
                     slot.SetForceWorldPosition(_boardService.GetWorldPosition(i,j));
                     slot.SetActive(true);
                     _board.Slots[i, j] = slot;
-                    //UnityEngine.Debug.Log($"{slot.Position} [{i},{j}]{order(i,j)}", slot);
                 }
             }
-
-            //int order(int i, int j) => _board.Row * _board.Column - _board.Column * (i + 1) + 1 + j;
-
-            // int sortingOrder = 0;
-            // for (int i = _board.Row - 1; i >= 0; i--)
-            // {
-            //     for (int j = _board.Column - 1; j >= 0; j--)
-            //     {
-            //         var slot = _slotPool.Get();
-            //         slot.SetGridPosition(new GridPosition(i,j, ++sortingOrder));
-            //         slot.SetForceWorldPosition(_boardService.GetWorldPosition(i,j));
-            //         slot.SetActive(true);
-            //         _board.Slots[i, j] = slot;
-            //         
-            //         UnityEngine.Debug.Log($"{slot.Position}", slot);
-            //     }
-            // }
         }
 
         public void Random()
         {
-            Slot slot;
             for (int i = 0; i < _board.Row; i++)
             {
                 for (int j = 0; j < _board.Column; j++)
                 {
-                    // var slot = _slotPool.Get();
-                    // slot.SetGridPosition(new GridPosition(i,j, _board.Row - i));
-                    // slot.SetForceWorldPosition(_boardService.GetWorldPosition(i,j));
-                    // slot.SetTile(GetRandomTile());
-                    // slot.SetActive(true);
-                    // _board.Slots[i, j].SetTile(GetRandomTile());
-                    
-                    slot = _board.Slots[i, j];
-                    slot.SetTile(GetRandomTile());
+                    var slot = _board.Slots[i, j];
+                    var tile = GetRandomTile();
+                    slot.SetTile(tile);
                     slot.SetActive(true);
+                    
+                    InitialiseBoardCounter(tile);
                 }
             }
         }
-        
+
+        public void Clear()
+        {
+            foreach (Slot boardSlot in _board.Slots)
+                _slotPool.Put(boardSlot);
+        }
+
         private Tile GetRandomTile()
         {
             var index = UnityEngine.Random.Range(0, _settings.SpriteModels.Length);
-            return _tilePool.Get().Initialise(_settings.SpriteModels[index]);
+            var tile = _settings.SpriteModels[index];
+
+            return _tilePool.Get().Initialise(tile);
+        }
+
+        private void InitialiseBoardCounter(Tile tile)
+        {
+            if (_board.Counter.ContainsKey(tile.ID))
+                _board.Counter[tile.ID]++;
+            else
+                _board.Counter.Add(tile.ID, 1);
         }
     }
 }

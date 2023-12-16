@@ -44,6 +44,8 @@ namespace Common
         {
             _registeredTypes = new Dictionary<Type, object>();
             
+            RegisterInstance<IStateMachine<BaseState>>(new StateMachine<BaseState>());
+
             RegisterInstance<IPool<Slot>>(new SlotPool(_slotPrefab, Settings.BoardParam.Capacity));
             RegisterInstance<IPool<Tile>>(new TilePool(_tilePrefab, Settings.BoardParam.Capacity));
 
@@ -51,12 +53,14 @@ namespace Common
             RegisterInstance<IBoardModel>(new BoardModel());
             RegisterInstance<IBoardService>(new BoardService(this));
             RegisterInstance<IValidator>(new SlotValidator(this));
-            RegisterInstance<ICleaningBoard>(new ClearingBoard(this));
-            RegisterInstance<IMatching>(new FindMatching(this));
+            RegisterInstance<IClearingSlots>(new ClearingBoard(this));
+            RegisterInstance<IMatching, ICheckResult>(new FindMatching(this));
             RegisterInstance<IShiftingSlots>(new ShiftingSlots(this));
             
             RegisterInstance<IGameplay>(new Gameplay(this));
             RegisterInstance<IBoardRenderer>(new BordRenderer(this));
+            
+            InitialiseGameplayStateMachine();
         }
         
         public T Resolve<T>()
@@ -69,9 +73,19 @@ namespace Common
             _registeredTypes.Add(typeof(T), instance);
         }
         
-        private void RegisterPoolInstance<TPool,T>(T instance)
+        private void RegisterInstance<T0,T1>(object instance)
         {
-            _registeredTypes.Add(typeof(T), instance);
+            _registeredTypes.Add(typeof(T0), instance);
+            _registeredTypes.Add(typeof(T1), instance);
+        }
+
+        private void InitialiseGameplayStateMachine()
+        {
+            var stateMachine = this.Resolve<IStateMachine<BaseState>>();
+            
+            stateMachine.Register<InitialiseState>(new InitialiseState(this));
+            stateMachine.Register<GameplayState>(new GameplayState(this));
+            stateMachine.Register<ResetState>(new ResetState(this));
         }
     }
 }

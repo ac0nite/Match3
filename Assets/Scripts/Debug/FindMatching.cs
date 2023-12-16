@@ -1,4 +1,6 @@
-﻿using Debug;
+﻿using System;
+using System.Linq;
+using Debug;
 using Match3.Board;
 
 namespace Common.Debug
@@ -7,11 +9,20 @@ namespace Common.Debug
     {
         bool Find();
     }
-    public class FindMatching : IMatching
+
+    public interface ICheckResult
     {
-        bool isMatch = false;
+        event Action RoundCompletedEvent;
+        void Check();
+    }
+    public class FindMatching : IMatching, ICheckResult
+    {
         private readonly IBoardModel _board;
         private readonly IValidator _validator;
+
+        bool isMatch = false;
+
+        public event Action RoundCompletedEvent;
 
         public FindMatching(ApplicationContext context)
         {
@@ -66,6 +77,19 @@ namespace Common.Debug
                 return true;
 
             return false;
+        }
+        
+        public void Check()
+        {
+            var sum = _board.Counter.Sum(c => c.Value);
+            var isAllCounter = _board.Counter.All(c => c.Value < 3);
+            UnityEngine.Debug.Log($"CheckResult! Sum:{sum} IsAllCounter:{isAllCounter}");
+            
+            if(sum < 3) RoundCompletedEvent?.Invoke();
+
+            
+            if(isAllCounter)
+                RoundCompletedEvent?.Invoke();
         }
     }
 }

@@ -5,13 +5,14 @@ using Debug;
 
 namespace Common.Debug
 {
-    public interface ICleaningBoard
+    public interface IClearingSlots
     {
-        void Execute(Action callback);
-        UniTask ExecuteAsync();
+        void MatchExecute(Action callback);
+        UniTask MatchExecuteAsync();
+        UniTask AllExecuteAsync();
     }
     
-    public class ClearingBoard : ICleaningBoard
+    public class ClearingBoard : IClearingSlots
     {
         private readonly IBoardModel _board;
         private readonly IBoardService _boardService;
@@ -21,7 +22,7 @@ namespace Common.Debug
             _board = context.Resolve<IBoardModel>();
             _boardService = context.Resolve<IBoardService>();
         }
-        public void Execute(Action callback)
+        public void MatchExecute(Action callback)
         {
             foreach (var slot in _board.Slots)
             {
@@ -32,29 +33,61 @@ namespace Common.Debug
             callback?.Invoke();
         }
 
-        public async UniTask ExecuteAsync()
+        public async UniTask MatchExecuteAsync()
         {
             UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] Clearing Execute begin");
-            Slot lastSlot = null;
+            // Slot lastSlot = null;
+            //
+            // foreach (var slot in _board.Slots)
+            // {
+            //     if (lastSlot != null)
+            //     {
+            //         // UnityEngine.Debug.Log($"[X] run {lastSlot.Position}");
+            //         // _boardService.CleanSlot(lastSlot);
+            //         //lastSlot = null;
+            //     }
+            //     
+            //     if (slot.IsMatch)
+            //     {
+            //         lastSlot = slot;
+            //         
+            //         // UnityEngine.Debug.Log($"[X] run {lastSlot.Position}");
+            //         await _boardService.CleanSlot(slot);
+            //         //await UniTask.Delay(1000);
+            //     }
+            // }
+            //
+            // UnityEngine.Debug.Log($"[X] last {lastSlot.Position}");
+            
+            // await _boardService.CleanSlot(lastSlot);
+            
+            // if (lastSlot != null)
+            // {
+            //     await _boardService.CleanSlot(lastSlot);
+            // }
+            
+            
+
+            UniTask lastTask = new UniTask();
             foreach (var slot in _board.Slots)
             {
-                if (lastSlot != null)
-                    _boardService.CleanSlot(lastSlot);
+                if(slot.IsMatch) 
+                    lastTask = _boardService.CleanSlot(slot);
                 
-                if (slot.IsMatch)
-                {
-                    lastSlot = slot;
-                    //await _boardService.CleanSlot(slot);
-                    //await UniTask.Delay(1000);
-                }
             }
 
-            if (lastSlot != null)
-            {
-                await _boardService.CleanSlot(lastSlot);
-            }
+            await lastTask;
             
             UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] ExecuteAsync end");
+        }
+
+        public async UniTask AllExecuteAsync()
+        {
+            foreach (var slot in _board.Slots)
+            {
+                if(!slot.IsEmpty)
+                    await _boardService.CleanSlot(slot);
+            }
         }
     }
 }

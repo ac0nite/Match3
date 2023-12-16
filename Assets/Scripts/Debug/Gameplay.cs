@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using Cysharp.Threading.Tasks;
 using Debug;
 using Match3.Board;
 using UnityEngine;
@@ -19,12 +18,13 @@ namespace Common.Debug
         private readonly IMatching _matching;
         private readonly IBoardService _boardService;
         private readonly IValidator _validator;
-        private readonly ICleaningBoard _cleaning;
+        private readonly IClearingSlots _cleaning;
         private readonly IBoardModel _board;
         private readonly IShiftingSlots _shifting;
         
         private GridPosition _beginPositionGrid;
         private GridPosition _endPositionGrid;
+        private readonly ICheckResult _checkingResult;
 
         public Gameplay(ApplicationContext context)
         {
@@ -32,9 +32,10 @@ namespace Common.Debug
             _board = context.Resolve<IBoardModel>();
             _boardService = context.Resolve<IBoardService>();
             _validator = context.Resolve<IValidator>();
-            _cleaning = context.Resolve<ICleaningBoard>();
+            _cleaning = context.Resolve<IClearingSlots>();
             _shifting = context.Resolve<IShiftingSlots>();
             _matching = context.Resolve<IMatching>();
+            _checkingResult = context.Resolve<ICheckResult>();
         }
 
         public void SetActive(bool active)
@@ -102,11 +103,13 @@ namespace Common.Debug
             _matching.Find();
             do
             {
-                await _cleaning.ExecuteAsync();
+                await _cleaning.MatchExecuteAsync();
                 await _shifting.AllShiftAsync();
                 // await UniTask.Delay(100);
             } 
             while (_matching.Find());
+            
+            _checkingResult.Check();
             
             
             _beginPositionGrid = GridPosition.Empty;
@@ -142,7 +145,7 @@ namespace Common.Debug
             UnityEngine.Debug.Log(isMatch);
             do
             {
-                _cleaning.Execute(() => _shifting.AllShift());
+                _cleaning.MatchExecute(() => _shifting.AllShift());
             } 
             while (_matching.Find());
             

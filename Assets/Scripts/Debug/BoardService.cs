@@ -52,6 +52,7 @@ namespace Debug
         public async UniTask CleanSlot(Slot slot)
         {
             await slot.Tile.PlayDestroyAnimationAsync(_destroyAnimationSpeed);
+            _boardModel.Counter[slot.Tile.ID]--;
             _tilePool.Put(slot.Tile);
             slot.Clear();
         }
