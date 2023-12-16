@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Common.Debug;
 using Debug;
 using Match3.Board;
+using Match3.Environment;
 using Match3.Screen;
 using UnityEngine;
 
@@ -44,6 +45,7 @@ namespace Common
         [SerializeField] public Settings Settings;
         [SerializeField] private InputSystem _inputSystem;
         [SerializeField] private GameplayScreen _gameplayScreen;
+        [SerializeField] private AnimationEnvironment _animationEnvironment;
         [SerializeField] private Slot _slotPrefab;
         [SerializeField] private Tile _tilePrefab;
 
@@ -69,6 +71,7 @@ namespace Common
             
             RegisterInstance<IGameplay>(new Gameplay(this));
             RegisterInstance<IBoardRenderer>(new BordRenderer(this));
+            RegisterInstance<IAnimationEnvironment>(_animationEnvironment);
 
             InitialiseScreenService();
             InitialiseGameplayStateMachine();

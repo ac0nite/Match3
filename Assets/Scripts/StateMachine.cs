@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Common.Debug;
 using Cysharp.Threading.Tasks;
 using Debug;
+using Match3.Environment;
 using Match3.Screen;
 
 namespace Common
@@ -57,6 +58,7 @@ namespace Common
         private readonly ICheckResult _checkResult;
         private readonly IStateMachine<BaseState> _stateMachine;
         private readonly GameplayScreen _gameplayScreen;
+        private readonly IAnimationEnvironment _animationEnvironment;
 
         public GameplayState(ApplicationContext context) : base(context)
         {
@@ -64,6 +66,7 @@ namespace Common
             _checkResult = context.Resolve<ICheckResult>();
             _stateMachine = context.Resolve<IStateMachine<BaseState>>();
             _gameplayScreen = context.Resolve<IScreenService>().Get<GameplayScreen>();
+            _animationEnvironment = context.Resolve<IAnimationEnvironment>();
         }
 
         public override void Enter()
@@ -75,6 +78,7 @@ namespace Common
             
             _gameplay.SetActive(true);
             _gameplayScreen.Show();
+            _animationEnvironment.Play();
         }
 
         private void RoundCompleted()
@@ -86,6 +90,7 @@ namespace Common
         {
             _gameplay.SetActive(false);
             _gameplayScreen.Hide();
+            _animationEnvironment.Stop();
             
             _checkResult.RoundCompletedEvent -= RoundCompleted;
             _gameplayScreen.EndButtonPressedEvent -= RoundCompleted;
