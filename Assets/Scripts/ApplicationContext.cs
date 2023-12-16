@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Common.Debug;
 using Debug;
 using Match3.Board;
+using Match3.Screen;
 using UnityEngine;
 
 namespace Common
@@ -35,6 +36,7 @@ namespace Common
     {
         [SerializeField] public Settings Settings;
         [SerializeField] private InputSystem _inputSystem;
+        [SerializeField] private GameplayScreen _gameplayScreen;
         [SerializeField] private Slot _slotPrefab;
         [SerializeField] private Tile _tilePrefab;
 
@@ -45,6 +47,7 @@ namespace Common
             _registeredTypes = new Dictionary<Type, object>();
             
             RegisterInstance<IStateMachine<BaseState>>(new StateMachine<BaseState>());
+            RegisterInstance<IScreenService>(new ScreenService());
 
             RegisterInstance<IPool<Slot>>(new SlotPool(_slotPrefab, Settings.BoardParam.Capacity));
             RegisterInstance<IPool<Tile>>(new TilePool(_tilePrefab, Settings.BoardParam.Capacity));
@@ -59,10 +62,18 @@ namespace Common
             
             RegisterInstance<IGameplay>(new Gameplay(this));
             RegisterInstance<IBoardRenderer>(new BordRenderer(this));
-            
+
+            InitialiseScreenService();
             InitialiseGameplayStateMachine();
         }
-        
+
+        private void InitialiseScreenService()
+        {
+            var screenService = this.Resolve<IScreenService>();
+            
+            screenService.Register<GameplayScreen>(_gameplayScreen);
+        }
+
         public T Resolve<T>()
         {
             return (T) _registeredTypes[typeof(T)];

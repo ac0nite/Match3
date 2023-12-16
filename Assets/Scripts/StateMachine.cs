@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Common.Debug;
 using Cysharp.Threading.Tasks;
 using Debug;
+using Match3.Screen;
 
 namespace Common
 {
@@ -54,20 +55,25 @@ namespace Common
         private readonly IGameplay _gameplay;
         private readonly ICheckResult _checkResult;
         private readonly IStateMachine<BaseState> _stateMachine;
+        private readonly GameplayScreen _gameplayScreen;
 
         public GameplayState(ApplicationContext context) : base(context)
         {
             _gameplay = context.Resolve<IGameplay>();
             _checkResult = context.Resolve<ICheckResult>();
             _stateMachine = context.Resolve<IStateMachine<BaseState>>();
+            _gameplayScreen = context.Resolve<IScreenService>().Get<GameplayScreen>();
         }
 
         public override void Enter()
         {
             UnityEngine.Debug.Log($"GAMEPLAY STATE");
             
-            _checkResult.RoundCompletedEvent += RoundCompleted; 
+            _checkResult.RoundCompletedEvent += RoundCompleted;
+            _gameplayScreen.EndButtonPressedEvent += RoundCompleted;
+            
             _gameplay.SetActive(true);
+            _gameplayScreen.Show();
         }
 
         private void RoundCompleted()
@@ -78,7 +84,10 @@ namespace Common
         public override void Exit()
         {
             _gameplay.SetActive(false);
+            _gameplayScreen.Hide();
+            
             _checkResult.RoundCompletedEvent -= RoundCompleted;
+            _gameplayScreen.EndButtonPressedEvent -= RoundCompleted;
         }
     }
     
@@ -97,6 +106,7 @@ namespace Common
 
         public override void Enter()
         {
+            UnityEngine.Debug.Log($"RESET STATE");
             CleanBoardAsync();
         }
 
@@ -108,7 +118,7 @@ namespace Common
         {
             UnityEngine.Debug.Log($"CleanBoardAsync begin");
             
-            await UniTask.Delay(1000);
+            await UniTask.Delay(500);
             await _clearing.AllExecuteAsync();
             _boardRenderer.Clear();
             
