@@ -39,7 +39,6 @@ namespace Match3.General
 
         public async UniTask MatchExecuteAsync()
         {
-            UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] Clearing Execute begin");
             // Slot lastSlot = null;
             //
             // foreach (var slot in _board.Slots)
@@ -79,10 +78,7 @@ namespace Match3.General
                     lastTask = _boardService.CleanSlot(slot);
                 
             }
-
             await lastTask;
-            
-            UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] ExecuteAsync end");
         }
 
         public async UniTask AllExecuteAsync()

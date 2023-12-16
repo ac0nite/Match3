@@ -33,7 +33,6 @@ namespace Match3.Board
 
         public static BoardDetails ToDetails(string json)
         {
-            // BoardDetails details;
             try
             {
                 return JsonConvert.DeserializeObject<BoardDetails>(json);
@@ -43,8 +42,6 @@ namespace Match3.Board
                 UnityEngine.Debug.LogWarning($"FAILED TO DESERIALIZE! [{e.Message}]");
                 return null;
             }
-
-            // return details;
         }
     }
     
@@ -55,32 +52,6 @@ namespace Match3.Board
         public string id;
     }
 
-    [Serializable]
-    public struct SlotDetailsX
-    {
-        public Vector2 grid;
-        public string id;
-    }
-    
-    [Serializable]
-    public struct BoardDetailsX
-    {
-        public Vector2 size;
-        public List<SlotDetailsX> fff;
-
-        // public BoardDetailsX()
-        // {
-        //     fff = new List<Vector3>();
-        //     size = Vector2.negativeInfinity;
-        // }
-        // public List<SlotDetails> param;
-        //
-        // public BoardDetails()
-        // {
-        //     param = new List<SlotDetails>();
-        // }
-    }
-    
 
     [Serializable]
     public class BoardDetails

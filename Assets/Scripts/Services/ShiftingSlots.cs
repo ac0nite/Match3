@@ -60,8 +60,6 @@ namespace Match3.General
         
         public async UniTask Shift(GridPosition begin, GridPosition end)
         {
-            UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] Shift");
-            
             var from = _boardService.GetWorldPosition(begin);
             var to = _boardService.GetWorldPosition(end);
 
@@ -112,8 +110,6 @@ namespace Match3.General
         
         public async UniTask AllShiftAsync()
         {
-            UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] AllShiftAsync begin");
-
             GridPosition from, to;
             from = to = GridPosition.Empty;
             Slot lastSlot = null;
@@ -123,31 +119,8 @@ namespace Match3.General
             {
                 for (int j = _board.Column - 1; j >= 0; j--)
                 {
-                    // if (_board.Slots[i, j].IsEmpty)
-                    // {
-                    //     // UnityEngine.Debug.Log($"* {slots[i, j]}");
-                    //     to = from = _board.Slots[i, j].Position;
-                    //     while (_validator.IsEmptySlot(from = from.Up))
-                    //     {
-                    //         // UnityEngine.Debug.Log($"- UP {slots[i, j]}");
-                    //         if (!_validator.IsSlot(from))
-                    //             break;
-                    //     }
-                    //
-                    //     if (_validator.IsSlot(from))
-                    //     {
-                    //         await Shift(from, to);
-                    //     }
-                    // }
-                    
                     if (_board.Slots[i, j].IsEmpty)
                     {
-                        // if (_validator.IsSlot(from))
-                        // {
-                        //     Shift(from, to);
-                        //     from = to = GridPosition.Empty;
-                        // }
-                        
                         to = from = _board.Slots[i, j].Position;
                         while (_validator.IsEmptySlot(from = from.Up))
                         {
@@ -164,8 +137,6 @@ namespace Match3.General
             }
 
             await lastTask;
-            
-            UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] AllShiftAsync end");
         }
     }
 }

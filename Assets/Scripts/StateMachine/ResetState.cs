@@ -29,17 +29,10 @@ namespace Match3.StateMachine
 
         private async void CleanBoardAsync()
         {
-            UnityEngine.Debug.Log($"CleanBoardAsync begin");
-            
-            await UniTask.Delay(1000);
+            await UniTask.Delay(200);
             await _clearing.AllExecuteAsync();
-            
-            UnityEngine.Debug.Log($"boardRenderer.Clear");
             _boardRenderer.Clear();
-            await UniTask.DelayFrame(120);
-            
-            UnityEngine.Debug.Log($"CleanBoardAsync end");
-            
+
             _stateMachine.Next<InitialiseState>();
         }
     }

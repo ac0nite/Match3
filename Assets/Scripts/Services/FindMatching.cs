@@ -40,8 +40,6 @@ namespace Match3.General
                     TryToFindAndMark(_board.Slots[i, j]);
                 }
             }
-
-            UnityEngine.Debug.Log($"Find: {isMatch}");
             return isMatch;
         }
 

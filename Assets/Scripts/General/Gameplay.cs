@@ -61,10 +61,10 @@ namespace Match3.General
             _beginPositionGrid = _boardService.GetGridPositionByPointer(worldPosition);
             if (_validator.IsEmptySlot(_beginPositionGrid))
                 _beginPositionGrid = GridPosition.Empty;
-            else
-            {
-                UnityEngine.Debug.Log($"Begin grid:{_beginPositionGrid} slot:{_board.Slots[_beginPositionGrid.RowIndex, _beginPositionGrid.ColumnIndex].Position}");   
-            }
+            // else
+            // {
+            //     UnityEngine.Debug.Log($"Begin grid:{_beginPositionGrid} slot:{_board.Slots[_beginPositionGrid.RowIndex, _beginPositionGrid.ColumnIndex].Position}");   
+            // }
         }
         
         private void TryToNextCheckSlot(Vector3 worldPosition)
@@ -80,7 +80,7 @@ namespace Match3.General
             {
                 if (_beginPositionGrid.IsSides(_endPositionGrid) || _beginPositionGrid.IsDown(_endPositionGrid))
                 {
-                    UnityEngine.Debug.Log($"SIDES AND DOWN {_endPositionGrid.ToString()}");
+                    //UnityEngine.Debug.Log($"SIDES AND DOWN {_endPositionGrid.ToString()}");
                     UpdateBoardAsync();
                 }
                 else if(_beginPositionGrid.IsUp(_endPositionGrid) && !_validator.IsEmpty(_endPositionGrid))
@@ -92,17 +92,15 @@ namespace Match3.General
                 else
                 {
                     _endPositionGrid = GridPosition.Empty;
-                    UnityEngine.Debug.Log($"-");
+                    //UnityEngine.Debug.Log($"-");
                 }
             }
         }
 
         private async void UpdateBoardAsync()
         {
-            Log($"UpdateBoardAsync begin");
             _input.Lock = true;
             await _shifting.Shift(_beginPositionGrid, _endPositionGrid);
-            Log($"after shift");
 
             _matching.Find();
             do
@@ -115,52 +113,9 @@ namespace Match3.General
             
             _checkingResult.Check();
             
-            
             _beginPositionGrid = GridPosition.Empty;
             _endPositionGrid = GridPosition.Empty;
             _input.Lock = false;
-            
-            Log($"UpdateBoardAsync end");
-        }
-
-        private void Log(string message)
-        {
-            UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] {message}");
-        }
-
-        private void Shift()
-        {
-            _input.Lock = true;
-            
-            _shifting.Shift(_beginPositionGrid, _endPositionGrid, () =>
-            {
-                TryToMatchesAndShifting(() =>
-                {
-                    _beginPositionGrid = GridPosition.Empty;
-                    _endPositionGrid = GridPosition.Empty;
-                    _input.Lock = false;
-                });
-            });
-        }
-
-        private void TryToMatchesAndShifting(Action callback)
-        {
-            var isMatch = _matching.Find();
-            UnityEngine.Debug.Log(isMatch);
-            do
-            {
-                _cleaning.MatchExecute(() => _shifting.AllShift());
-            } 
-            while (_matching.Find());
-            
-            // while (_findMatch.FindMatches())
-            // {
-            //     _findMatch.FindMatches();
-            //     _cleaner.Clean(() => _shifting.AllShift());
-            // }
-            //
-            // _shifting.AllShift();
-            callback?.Invoke();
         }
     }
 }

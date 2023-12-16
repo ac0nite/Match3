@@ -40,14 +40,15 @@ namespace Match3.General
 
         public UniTask PlayDestroyAnimationAsync(float speed)
         {
-            UnityEngine.Debug.Log($"PlayDestroyAnimationAsync begin");
+            //UnityEngine.Debug.Log($"PlayDestroyAnimationAsync begin");
             
             var utcs = new UniTaskCompletionSource();
             
             _animation.PlayDestroy(speed);
             _animation.OnDestroyEndedAnimationDelegate = () =>
             {
-                UnityEngine.Debug.Log($"PlayDestroyAnimationAsync end", transform.parent);
+                //UnityEngine.Debug.Log($"PlayDestroyAnimationAsync end", transform.parent);
+                _animation.Dispose();
                 utcs.TrySetResult();
             };
             return utcs.Task;

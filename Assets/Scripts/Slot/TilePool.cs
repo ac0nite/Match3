@@ -27,7 +27,6 @@ namespace Match3.Pool
 
         public override Tile Configure(Tile tile)
         {
-            UnityEngine.Debug.Log($"get: {_pool.Count}");
             return tile;
         }
 
@@ -36,7 +35,6 @@ namespace Match3.Pool
             item.transform.SetParent(_parent, false);
             item.SetActive(false);
             base.Put(item);
-            UnityEngine.Debug.Log($"put: {_pool.Count}");
         }
     }
 }

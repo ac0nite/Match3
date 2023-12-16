@@ -25,8 +25,6 @@ namespace Match3.Animation.Helper
 
         public void PlayIdle(float speed, float delay)
         {
-            //UnityEngine.Debug.Log($"PlayIdle! {speed} {delay}");
-            
             DOVirtual.DelayedCall(delay, () =>
             {
                 PlayAnimation(AnimationId.Idle, speed);
