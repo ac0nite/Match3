@@ -14,6 +14,7 @@ namespace Common
         public BoardParam BoardParam;
         public AnimationSettings Animation;
         public IconSpriteModel[] SpriteModels;
+        public BoardConfig BoardConfig;
     }
     
     [Serializable]
@@ -31,6 +32,12 @@ namespace Common
         public float ShiftingTime;
         public float DestroySpeed;
         
+    }
+
+    [Serializable]
+    public struct BoardConfig
+    {
+        public List<TextAsset> Param;
     }
     public class ApplicationContext : MonoBehaviour
     {

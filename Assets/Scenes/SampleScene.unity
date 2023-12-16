@@ -767,7 +767,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Settings:
     BoardParam:
-      Row: 2
+      Row: 6
       Column: 4
       TileSize: 1
     Animation:
@@ -778,6 +778,11 @@ MonoBehaviour:
       _animatorController: {fileID: 9100000, guid: befab51d24cf54b7d808a3ef358de86f, type: 2}
     - _id: fire
       _animatorController: {fileID: 9100000, guid: 091bb637c307a4db6bf77221202dd8ba, type: 2}
+    BoardConfig:
+      Param:
+      - {fileID: 4900000, guid: 5e728b9c5263e4d8abf15134d8016448, type: 3}
+      - {fileID: 4900000, guid: 6520b6edbfc904c5cbcf83541c89ca87, type: 3}
+      - {fileID: 4900000, guid: 40211709b44ff482ca746b88f7c0875b, type: 3}
   _inputSystem: {fileID: 2009623167}
   _gameplayScreen: {fileID: 322709646}
   _slotPrefab: {fileID: 227217556159814421, guid: e7fabf9e9e49a944d903ce82dbc8aacb, type: 3}

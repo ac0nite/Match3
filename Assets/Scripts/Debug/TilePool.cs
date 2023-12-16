@@ -25,6 +25,7 @@ namespace Common.Debug
 
         public override Tile Configure(Tile tile)
         {
+            UnityEngine.Debug.Log($"get: {_pool.Count}");
             return tile;
         }
 
@@ -33,7 +34,7 @@ namespace Common.Debug
             item.transform.SetParent(_parent, false);
             item.SetActive(false);
             base.Put(item);
-            //UnityEngine.Debug.Log($"TilePool: {_pool.Count}");
+            UnityEngine.Debug.Log($"put: {_pool.Count}");
         }
     }
 }

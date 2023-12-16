@@ -1,12 +1,15 @@
+using System;
 using Common;
 using Common.Debug;
+using Match3.Board;
 
 namespace Debug
 {
     public interface IBoardRenderer
     {
         void Create();
-        void Random();
+        void RendererConfig();
+        void RendererRandom();
         void Clear();
     }
     
@@ -18,6 +21,8 @@ namespace Debug
         private readonly IBoardModel _board;
         private readonly Settings _settings;
 
+        private int _roundCounter;
+
         public BordRenderer(ApplicationContext context)
         {
             _board = context.Resolve<IBoardModel>();
@@ -25,6 +30,7 @@ namespace Debug
             _tilePool = context.Resolve<IPool<Tile>>();
             _boardService = context.Resolve<IBoardService>();
             _settings = context.Settings;
+            _roundCounter = 0;
         }
 
         public void Create()
@@ -43,8 +49,35 @@ namespace Debug
             }
         }
 
-        public void Random()
+        public void RendererConfig()
         {
+            if (_roundCounter >= _settings.BoardConfig.Param.Count)
+            {
+                RendererRandom();
+                return;
+            }
+
+            UnityEngine.Debug.Log($"BOARD CONFIG");
+            var t = _settings.BoardConfig.Param[_roundCounter];
+            var details = BoardConverter.ToDetails(_settings.BoardConfig.Param[_roundCounter].text);
+            
+            foreach (SlotDetails param in details.slots)
+            {
+                if(param.id == String.Empty)
+                    continue;
+                
+                var tile = GetTile(param.id);
+                var slot = _board.Slots[(int)param.grid.x, (int)param.grid.y];
+                slot.SetTile(tile);
+                slot.SetActive(true);
+                    
+                InitialiseBoardCounter(tile);
+            }
+        }
+
+        public void RendererRandom()
+        {
+            UnityEngine.Debug.Log($"BOARD RANDOM");
             for (int i = 0; i < _board.Row; i++)
             {
                 for (int j = 0; j < _board.Column; j++)
@@ -63,8 +96,15 @@ namespace Debug
         {
             foreach (Slot boardSlot in _board.Slots)
                 _slotPool.Put(boardSlot);
+
+            _roundCounter++;
         }
 
+        private Tile GetTile(string ID)
+        {
+            var param = Array.Find(_settings.SpriteModels, v => v.Id == ID);
+            return _tilePool.Get().Initialise(param);
+        }
         private Tile GetRandomTile()
         {
             var index = UnityEngine.Random.Range(0, _settings.SpriteModels.Length);

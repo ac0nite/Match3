@@ -40,7 +40,8 @@ namespace Common
             UnityEngine.Debug.Log($"INITIALISE STATE");
             
             _boardRenderer.Create();
-            _boardRenderer.Random();
+            //_boardRenderer.RendererRandom();
+            _boardRenderer.RendererConfig();
             
             _stateMachine.Next<GameplayState>();
         }
@@ -118,9 +119,12 @@ namespace Common
         {
             UnityEngine.Debug.Log($"CleanBoardAsync begin");
             
-            await UniTask.Delay(500);
+            await UniTask.Delay(1000);
             await _clearing.AllExecuteAsync();
+            
+            UnityEngine.Debug.Log($"boardRenderer.Clear");
             _boardRenderer.Clear();
+            await UniTask.DelayFrame(120);
             
             UnityEngine.Debug.Log($"CleanBoardAsync end");
             

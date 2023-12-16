@@ -25,7 +25,7 @@ namespace Common.Debug
 
         public void PlayIdle(float speed, float delay)
         {
-            UnityEngine.Debug.Log($"PlayIdle! {speed} {delay}");
+            //UnityEngine.Debug.Log($"PlayIdle! {speed} {delay}");
             
             DOVirtual.DelayedCall(delay, () =>
             {

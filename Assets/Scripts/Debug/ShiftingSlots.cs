@@ -116,6 +116,7 @@ namespace Common.Debug
             GridPosition from, to;
             from = to = GridPosition.Empty;
             Slot lastSlot = null;
+            UniTask lastTask = new UniTask();
 
             for (int i = _board.Row - 1; i >= 0; i--)
             {
@@ -140,11 +141,11 @@ namespace Common.Debug
                     
                     if (_board.Slots[i, j].IsEmpty)
                     {
-                        if (_validator.IsSlot(from))
-                        {
-                            Shift(from, to);
-                            from = to = GridPosition.Empty;
-                        }
+                        // if (_validator.IsSlot(from))
+                        // {
+                        //     Shift(from, to);
+                        //     from = to = GridPosition.Empty;
+                        // }
                         
                         to = from = _board.Slots[i, j].Position;
                         while (_validator.IsEmptySlot(from = from.Up))
@@ -152,12 +153,16 @@ namespace Common.Debug
                             if (!_validator.IsSlot(from))
                                 break;
                         }
+                        
+                        if (_validator.IsSlot(from))
+                        {
+                            lastTask = Shift(from, to);
+                        }
                     }
                 }
             }
-            
-            if (_validator.IsSlot(from))
-                await Shift(from, to);
+
+            await lastTask;
             
             UnityEngine.Debug.Log($"[{Thread.CurrentThread.ManagedThreadId}] AllShiftAsync end");
         }

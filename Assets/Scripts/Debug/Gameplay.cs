@@ -44,11 +44,13 @@ namespace Common.Debug
             {
                 _input.PointerDown += TryToCheckSlot;
                 _input.PointerDrag += TryToNextCheckSlot;
+                _input.Lock = false;
             }
             else
             {
                 _input.PointerDown -= TryToCheckSlot;
                 _input.PointerDrag -= TryToNextCheckSlot;
+                _input.Lock = true;
             }
         }
 

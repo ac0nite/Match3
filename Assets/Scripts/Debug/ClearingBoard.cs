@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Debug;
@@ -83,11 +84,17 @@ namespace Common.Debug
 
         public async UniTask AllExecuteAsync()
         {
+            List<UniTask> _tasks = new List<UniTask>();
             foreach (var slot in _board.Slots)
             {
-                if(!slot.IsEmpty)
-                    await _boardService.CleanSlot(slot);
+                if (!slot.IsEmpty)
+                {
+                    var task = _boardService.CleanSlot(slot);
+                    _tasks.Add(task);
+                }
             }
+
+            await UniTask.WhenAll(_tasks);
         }
     }
 }

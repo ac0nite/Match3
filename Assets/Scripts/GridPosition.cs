@@ -1,4 +1,6 @@
-﻿namespace Common
+﻿using System;
+
+namespace Common
 {
     public struct GridPosition
     {
