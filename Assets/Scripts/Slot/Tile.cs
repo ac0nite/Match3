@@ -38,20 +38,22 @@ namespace Match3.General
             return this;
         }
 
-        public UniTask PlayDestroyAnimationAsync(float speed)
+        public async UniTask PlayDestroyAnimationAsync(float speed)
         {
             //UnityEngine.Debug.Log($"PlayDestroyAnimationAsync begin");
             
             var utcs = new UniTaskCompletionSource();
             
             _animation.PlayDestroy(speed);
-            _animation.OnDestroyEndedAnimationDelegate = () =>
-            {
-                //UnityEngine.Debug.Log($"PlayDestroyAnimationAsync end", transform.parent);
-                _animation.Dispose();
-                utcs.TrySetResult();
-            };
-            return utcs.Task;
+            // _animation.OnDestroyEndedAnimationDelegate = () =>
+            // {
+            //     //UnityEngine.Debug.Log($"PlayDestroyAnimationAsync end", transform.parent);
+            //     _animation.Dispose();
+            //     utcs.TrySetResult();
+            // };
+
+            await UniTask.DelayFrame(50);
+            //return utcs.Task;
         }
     }
 }

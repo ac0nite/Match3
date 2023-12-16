@@ -39,46 +39,16 @@ namespace Match3.General
 
         public async UniTask MatchExecuteAsync()
         {
-            // Slot lastSlot = null;
-            //
-            // foreach (var slot in _board.Slots)
-            // {
-            //     if (lastSlot != null)
-            //     {
-            //         // UnityEngine.Debug.Log($"[X] run {lastSlot.Position}");
-            //         // _boardService.CleanSlot(lastSlot);
-            //         //lastSlot = null;
-            //     }
-            //     
-            //     if (slot.IsMatch)
-            //     {
-            //         lastSlot = slot;
-            //         
-            //         // UnityEngine.Debug.Log($"[X] run {lastSlot.Position}");
-            //         await _boardService.CleanSlot(slot);
-            //         //await UniTask.Delay(1000);
-            //     }
-            // }
-            //
-            // UnityEngine.Debug.Log($"[X] last {lastSlot.Position}");
-            
-            // await _boardService.CleanSlot(lastSlot);
-            
-            // if (lastSlot != null)
-            // {
-            //     await _boardService.CleanSlot(lastSlot);
-            // }
-            
-            
-
-            UniTask lastTask = new UniTask();
+            List<UniTask> _tasks = new List<UniTask>();
             foreach (var slot in _board.Slots)
             {
-                if(slot.IsMatch) 
-                    lastTask = _boardService.CleanSlot(slot);
-                
+                if (slot.IsMatch)
+                {
+                    var task = _boardService.CleanSlot(slot);
+                    _tasks.Add(task);
+                }
             }
-            await lastTask;
+            await UniTask.WhenAll(_tasks);
         }
 
         public async UniTask AllExecuteAsync()
