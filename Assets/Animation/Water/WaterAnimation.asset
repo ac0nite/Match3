@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77fafcc6bd2ee94ebe9ac341b986e7a, type: 3}
+  m_Name: WaterAnimation
+  m_EditorClassIdentifier: 
+  SpriteAnimations:
+  - Name: Idle
+    FPS: 15
+    Frames:
+    - {fileID: 21300000, guid: a9bcf8c7cf0255e4aab8378e47be9c0d, type: 3}
+    - {fileID: 21300000, guid: bb4c455896ce6194986f52ee391539cd, type: 3}
+    - {fileID: 21300000, guid: 450a53737f1568046b0813c119575f4e, type: 3}
+    - {fileID: 21300000, guid: 1d4c0881e76c78d469262eaa55770788, type: 3}
+    - {fileID: 21300000, guid: 07703a93147163247907e468343a3ad5, type: 3}
+    - {fileID: 21300000, guid: 559c9500bda38b94c926d2dfa1cec27a, type: 3}
+    - {fileID: 21300000, guid: 260be38db751e1f44b55b03cdeeea737, type: 3}
+    - {fileID: 21300000, guid: 74c81d0acfe731546bebafd7e7a36123, type: 3}
+    - {fileID: 21300000, guid: 61c99841cc6c98e40b96e36fa6613b94, type: 3}
+    - {fileID: 21300000, guid: a1064d6d26bc8594fbb675d0a568adb3, type: 3}
+    - {fileID: 21300000, guid: a83b7b836f45dd84a958957ce82ff33d, type: 3}
+    - {fileID: 21300000, guid: ae45837b9833d0f409a19e9b78ed2503, type: 3}
+    - {fileID: 21300000, guid: 075a9e56bedd33f449aed066f0a711c8, type: 3}
+    - {fileID: 21300000, guid: b37f21a62a90e8c47bbc255d002696bc, type: 3}
+    - {fileID: 21300000, guid: bab3f28a5299e4145a9147f8b801fcf0, type: 3}
+    - {fileID: 21300000, guid: 600d18dc5a2307243981402be42c8dbf, type: 3}
+    - {fileID: 21300000, guid: 3181ab340076cba4480bf15f7e08ed57, type: 3}
+    SpriteAnimationType: 0
+  - Name: Destroy
+    FPS: 15
+    Frames:
+    - {fileID: 21300000, guid: 33dc8879e751ab444b9a88194cd4b5cd, type: 3}
+    - {fileID: 21300000, guid: c8c9b04256264404c8b8bd1fea759cdf, type: 3}
+    - {fileID: 21300000, guid: f30d08604a9bb4246bffb1d5b9288bb6, type: 3}
+    - {fileID: 21300000, guid: 4e6ef0f81d2c5cf4ba317ca8b743b67c, type: 3}
+    - {fileID: 21300000, guid: 230f33a724cc1de47a3d6af3ebcbb291, type: 3}
+    - {fileID: 21300000, guid: 452caf5b87c29c145a6bcf7786048f57, type: 3}
+    - {fileID: 21300000, guid: 19c7d9b31469039499486dd427d6f15d, type: 3}
+    - {fileID: 21300000, guid: 22d862a79a6e9724fa09ad08c9674e03, type: 3}
+    - {fileID: 21300000, guid: 79809ccfb30e7b9419dc36d6f082ee2e, type: 3}
+    - {fileID: 21300000, guid: 72ad7c3f9c32e98409973cff9272b25f, type: 3}
+    - {fileID: 21300000, guid: 5b9d807647f520549bd99d0c9462cfa4, type: 3}
+    - {fileID: 21300000, guid: 1eea9e74843613c4986008717c0adb0c, type: 3}
+    - {fileID: 21300000, guid: e4e99ad5fbd7e6442978578dd4bd983d, type: 3}
+    - {fileID: 21300000, guid: f57eec8b121bb374b865b0737a74f182, type: 3}
+    - {fileID: 21300000, guid: c5cdcec51fed34144af0d81c53166b16, type: 3}
+    - {fileID: 21300000, guid: 74e8ed6d2a0d4d84380ebaacde28a5da, type: 3}
+    - {fileID: 21300000, guid: 2d47500a3a422554988fb32ece6835d1, type: 3}
+    - {fileID: 21300000, guid: 2128035b5d3e9364bb3a1394760e73bf, type: 3}
+    - {fileID: 21300000, guid: 4dd2748b95d3b1c479d5b3079bb67c08, type: 3}
+    SpriteAnimationType: 1

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -8,7 +9,7 @@ using Match3.Services;
 
 namespace Match3.General
 {
-    public interface IShiftingSlots
+    public interface IShifting
     {
         void Shift(GridPosition begin, GridPosition end, Action callback);
         void AllShift();
@@ -16,7 +17,7 @@ namespace Match3.General
         UniTask Shift(GridPosition begin, GridPosition end);
         UniTask AllShiftAsync();
     }
-    public class ShiftingSlots : IShiftingSlots
+    public class Shifting : IShifting
     {
         private readonly IValidator _validator;
         private readonly IBoardModel _board;
@@ -25,7 +26,7 @@ namespace Match3.General
         private Slot _cashedSlot;
         private readonly float _animationTime;
 
-        public ShiftingSlots(ApplicationContext context)
+        public Shifting(ApplicationContext context)
         {
             _board = context.Resolve<IBoardModel>();
             _boardService = context.Resolve<IBoardService>();
@@ -115,6 +116,8 @@ namespace Match3.General
             Slot lastSlot = null;
             UniTask lastTask = new UniTask();
 
+            List<UniTask> _tasks = new List<UniTask>();
+
             for (int i = _board.Row - 1; i >= 0; i--)
             {
                 for (int j = _board.Column - 1; j >= 0; j--)
@@ -130,13 +133,18 @@ namespace Match3.General
                         
                         if (_validator.IsSlot(from))
                         {
-                            lastTask = Shift(from, to);
+                            //lastTask = Shift(from, to);
+                            // _tasks.Add(Shift(from, to));
+                            // await UniTask.DelayFrame(1);
+
+                            await Shift(from, to);
                         }
                     }
                 }
             }
 
-            await lastTask;
+            // await lastTask;
+            // await UniTask.WhenAll(_tasks);
         }
     }
 }

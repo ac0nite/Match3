@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Common;
+using Match3.Board;
 using Match3.Environment;
 using Match3.General;
 using Match3.Models;
@@ -34,8 +35,6 @@ namespace Match3.Context
     public struct AnimationSettings
     {
         public float ShiftingTime;
-        public float DestroySpeed;
-        
     }
 
     [Serializable]
@@ -68,9 +67,10 @@ namespace Match3.Context
             RegisterInstance<IBoardModel>(new BoardModel());
             RegisterInstance<IBoardService>(new BoardService(this));
             RegisterInstance<IValidator>(new SlotValidator(this));
-            RegisterInstance<IClearingSlots>(new ClearingBoard(this));
+            RegisterInstance<IClearing>(new ClearingBoard(this));
             RegisterInstance<IMatching, ICheckResult>(new FindMatching(this));
-            RegisterInstance<IShiftingSlots>(new ShiftingSlots(this));
+            RegisterInstance<IShifting>(new Shifting(this));
+            RegisterInstance<IUpdateBoard>(new UpdateBoard(this));
             
             RegisterInstance<IGameplay>(new Gameplay(this));
             RegisterInstance<IBoardRenderer>(new BoardRenderer(this));

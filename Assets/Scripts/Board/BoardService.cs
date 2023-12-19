@@ -24,14 +24,11 @@ namespace Match3.Services
         private BoardParam _boardParam;
         private Vector3 _originalPosition;
         private readonly IPool<Tile> _tilePool;
-        private readonly float _destroyAnimationSpeed;
 
         public BoardService(ApplicationContext context)
         {
             _boardModel = context.Resolve<IBoardModel>();
             _tilePool = context.Resolve<IPool<Tile>>();
-            
-            _destroyAnimationSpeed = context.Settings.Animation.DestroySpeed;
         }
 
         public void Initialise(BoardParam boardParam)
@@ -53,12 +50,14 @@ namespace Match3.Services
 
         public async UniTask CleanSlot(Slot slot)
         {
-            await slot.Tile.PlayDestroyAnimationAsync(_destroyAnimationSpeed);
-            
             _boardModel.Counter[slot.Tile.ID]--;
             
+            await slot.Tile.PlayDestroyAnimationAsync();
+
             _tilePool.Put(slot.Tile);
             slot.Clear();
+
+            await UniTask.DelayFrame(1);
         }
         
         public GridPosition GetGridPositionByPointer(Vector3 worldPointerPosition)

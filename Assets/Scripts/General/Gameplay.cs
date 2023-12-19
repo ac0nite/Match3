@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading;
-using Common;
+﻿using Common;
+using Cysharp.Threading.Tasks;
+using Match3.Board;
 using Match3.Context;
 using Match3.Models;
 using Match3.Services;
@@ -11,6 +11,7 @@ namespace Match3.General
     public interface IGameplay
     {
         void SetActive(bool active);
+        UniTask UpdateBoardAsync();
     }
     
     public class Gameplay : IGameplay
@@ -20,23 +21,23 @@ namespace Match3.General
         private readonly IMatching _matching;
         private readonly IBoardService _boardService;
         private readonly IValidator _validator;
-        private readonly IClearingSlots _cleaning;
-        private readonly IBoardModel _board;
-        private readonly IShiftingSlots _shifting;
+        private readonly IClearing _cleaning;
+        private readonly IShifting _shifting;
         
         private GridPosition _beginPositionGrid;
         private GridPosition _endPositionGrid;
         private readonly ICheckResult _checkingResult;
+        private readonly IUpdateBoard _updateBoard;
 
         public Gameplay(ApplicationContext context)
         {
             _input = context.Resolve<IInputSystem>();
-            _board = context.Resolve<IBoardModel>();
             _boardService = context.Resolve<IBoardService>();
             _validator = context.Resolve<IValidator>();
-            _cleaning = context.Resolve<IClearingSlots>();
-            _shifting = context.Resolve<IShiftingSlots>();
+            _cleaning = context.Resolve<IClearing>();
+            _shifting = context.Resolve<IShifting>();
             _matching = context.Resolve<IMatching>();
+            _updateBoard = context.Resolve<IUpdateBoard>();
             _checkingResult = context.Resolve<ICheckResult>();
         }
 
@@ -97,21 +98,21 @@ namespace Match3.General
             }
         }
 
-        private async void UpdateBoardAsync()
+        public async UniTask UpdateBoardAsync()
         {
             _input.Lock = true;
             await _shifting.Shift(_beginPositionGrid, _endPositionGrid);
 
-            _matching.Find();
-            do
-            {
-                await _cleaning.MatchExecuteAsync();
-                await _shifting.AllShiftAsync();
-                // await UniTask.Delay(100);
-            } 
-            while (_matching.Find());
-            
-            _checkingResult.Check();
+            await _updateBoard.UpdateAsync();
+            // _matching.Find();
+            // do
+            // {
+            //     await _cleaning.MatchExecuteAsync();
+            //     await _shifting.AllShiftAsync();
+            // } 
+            // while (_matching.Find());
+            //
+            // _checkingResult.Check();
             
             _beginPositionGrid = GridPosition.Empty;
             _endPositionGrid = GridPosition.Empty;

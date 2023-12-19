@@ -9,14 +9,14 @@ using Match3.Services;
 
 namespace Match3.General
 {
-    public interface IClearingSlots
+    public interface IClearing
     {
         void MatchExecute(Action callback);
         UniTask MatchExecuteAsync();
         UniTask AllExecuteAsync();
     }
     
-    public class ClearingBoard : IClearingSlots
+    public class ClearingBoard : IClearing
     {
         private readonly IBoardModel _board;
         private readonly IBoardService _boardService;

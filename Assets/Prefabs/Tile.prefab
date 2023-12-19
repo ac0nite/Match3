@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7113267314516798661}
   - component: {fileID: 7085225003572312633}
-  - component: {fileID: 3967832269377965044}
-  - component: {fileID: 9174899512031205860}
+  - component: {fileID: 722863499851919135}
+  - component: {fileID: 8220299843690692048}
   - component: {fileID: 6520408226805049010}
   m_Layer: 0
-  m_Name: Item
+  m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,28 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &3967832269377965044
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9045963852871015951}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &9174899512031205860
+--- !u!114 &722863499851919135
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,10 +96,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 9045963852871015951}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66087ebfd4324db18171cf6179b2b104, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d4337bea670e194ca021e2a54e31bf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 3967832269377965044}
+  _playAutomatically: 0
+  _spriteAnimationObject: {fileID: 0}
+  _spriteRenderer: {fileID: 7085225003572312633}
+--- !u!114 &8220299843690692048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9045963852871015951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcec53e262df4ec98cfdc6d5d0f8992e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteAnimator: {fileID: 722863499851919135}
 --- !u!114 &6520408226805049010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,4 +128,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 7085225003572312633}
-  _animation: {fileID: 9174899512031205860}
+  _animation: {fileID: 8220299843690692048}

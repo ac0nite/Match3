@@ -1,4 +1,5 @@
 using System;
+using GabrielBigardi.SpriteAnimator;
 using UnityEngine;
 
 namespace Match3.Models
@@ -7,9 +8,9 @@ namespace Match3.Models
     public class TileModel
     {
         [SerializeField] private string _id;
-        [SerializeField] private RuntimeAnimatorController _animatorController;
+        [SerializeField] private SpriteAnimationObject _spriteAnimation;
 
         public string Id => _id;
-        public RuntimeAnimatorController AnimatorController => _animatorController;
+        public SpriteAnimationObject SpriteAnimation => _spriteAnimation;
     }
 }

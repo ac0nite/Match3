@@ -8,11 +8,11 @@ namespace Match3.StateMachine
     {
         private readonly IBoardRenderer _boardRenderer;
         private readonly IStateMachine<BaseState> _stateMachine;
-        private readonly IClearingSlots _clearing;
+        private readonly IClearing _clearing;
 
         public ResetState(ApplicationContext context) : base(context)
         {
-            _clearing = context.Resolve<IClearingSlots>();
+            _clearing = context.Resolve<IClearing>();
             _boardRenderer = context.Resolve<IBoardRenderer>();
             _stateMachine = context.Resolve<IStateMachine<BaseState>>();
         }

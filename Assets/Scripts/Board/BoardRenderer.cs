@@ -24,6 +24,7 @@ namespace Match3.General
         private readonly Settings _settings;
 
         private int _roundCounter;
+        private readonly IUpdateBoard _updateBoard;
 
         public BoardRenderer(ApplicationContext context)
         {
@@ -31,6 +32,7 @@ namespace Match3.General
             _slotPool = context.Resolve<IPool<Slot>>();
             _tilePool = context.Resolve<IPool<Tile>>();
             _boardService = context.Resolve<IBoardService>();
+            _updateBoard = context.Resolve<IUpdateBoard>();
             _settings = context.Settings;
             _roundCounter = 0;
         }
@@ -75,6 +77,8 @@ namespace Match3.General
                     
                 InitialiseBoardCounter(tile);
             }
+
+            _updateBoard.UpdateAsync();
         }
 
         public void RendererRandom()
@@ -92,6 +96,8 @@ namespace Match3.General
                     InitialiseBoardCounter(tile);
                 }
             }
+
+            _updateBoard.UpdateAsync();
         }
 
         public void Clear()
