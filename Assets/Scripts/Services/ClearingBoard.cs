@@ -6,6 +6,8 @@ using Cysharp.Threading.Tasks;
 using Match3.Context;
 using Match3.Models;
 using Match3.Services;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Match3.General
 {
@@ -68,17 +70,18 @@ namespace Match3.General
             // {
             //     await _boardService.CleanSlot(lastSlot);
             // }
-            
-            
 
-            UniTask lastTask = new UniTask();
+
+
+            List<UniTask> _tasks = new List<UniTask>();
             foreach (var slot in _board.Slots)
             {
                 if(slot.IsMatch) 
-                    lastTask = _boardService.CleanSlot(slot);
+                    _tasks.Add(_boardService.CleanSlot(slot));
                 
             }
-            await lastTask;
+            // await lastTask;
+            await UniTask.WhenAll(_tasks);
         }
 
         public async UniTask AllExecuteAsync()

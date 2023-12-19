@@ -31,6 +31,7 @@ namespace Match3.Board
             do
             {
                 await _cleaning.MatchExecuteAsync();
+                //await UniTask.Delay(5000);
                 await _shifting.AllShiftAsync();
             } 
             while (_matching.Find());

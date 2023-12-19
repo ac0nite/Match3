@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Common;
 using Match3.Board;
 using Match3.Context;
@@ -97,7 +98,17 @@ namespace Match3.General
                 }
             }
 
+            Save();
             _updateBoard.UpdateAsync();
+        }
+
+        private void Save()
+        {
+            var json = BoardConverter.ToJson(_board.Slots);
+            string filepath = System.IO.Path.Combine("Assets//settings", $"Board_{DateTime.Now.ToString("hmmsstt")}.json");
+            File.WriteAllText(filepath, json);
+            UnityEditor.AssetDatabase.SaveAssets();
+            UnityEngine.Debug.Log($"Save to: {filepath}");
         }
 
         public void Clear()

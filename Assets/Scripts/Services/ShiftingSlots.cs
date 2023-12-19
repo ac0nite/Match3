@@ -111,36 +111,88 @@ namespace Match3.General
         
         public async UniTask AllShiftAsync()
         {
-            GridPosition from, to;
-            from = to = GridPosition.Empty;
             Slot lastSlot = null;
             UniTask lastTask = new UniTask();
 
             List<UniTask> _tasks = new List<UniTask>();
 
-            for (int i = _board.Row - 1; i >= 0; i--)
-            {
-                for (int j = _board.Column - 1; j >= 0; j--)
-                {
-                    if (_board.Slots[i, j].IsEmpty)
-                    {
-                        to = from = _board.Slots[i, j].Position;
-                        while (_validator.IsEmptySlot(from = from.Up))
-                        {
-                            if (!_validator.IsSlot(from))
-                                break;
-                        }
-                        
-                        if (_validator.IsSlot(from))
-                        {
-                            //lastTask = Shift(from, to);
-                            // _tasks.Add(Shift(from, to));
-                            // await UniTask.DelayFrame(1);
+            // for (int i = _board.Row - 1; i >= 0; i--)
+            // {
+            //     for (int j = _board.Column - 1; j >= 0; j--)
+            //     {
+            //         if (_board.Slots[i, j].IsEmpty)
+            //         {
+            //             to = from = _board.Slots[i, j].Position;
+            //             while (_validator.IsEmptySlot(from = from.Up))
+            //             {
+            //                 if (!_validator.IsSlot(from))
+            //                     break;
+            //             }
+            //             
+            //             if (_validator.IsSlot(from))
+            //             {
+            //                 //lastTask = Shift(from, to);
+            //                 // _tasks.Add(Shift(from, to));
+            //                 // await UniTask.DelayFrame(1);
+            //
+            //                 await Shift(from, to);
+            //                 i = _board.Row;
+            //                 j = _board.Column;
+            //             }
+            //         }
+            //     }
+            // }
 
-                            await Shift(from, to);
+            var from = new GridPosition();
+            var to = new GridPosition();
+            UniTask _lastTask;
+            while (Find(out from, out to))
+            {
+                //await Shift(from, to);
+                //await UniTask.DelayFrame(1);
+                _tasks.Add(Shift(from, to));
+                await UniTask.DelayFrame(2);
+            }
+
+            await UniTask.WhenAll(_tasks);
+            //await lastTask;
+
+            bool Find(out GridPosition _from, out GridPosition _to)
+            {
+                _from = GridPosition.Empty;
+                _to = GridPosition.Empty;
+                
+                for (int i = _board.Row - 1; i >= 0; i--)
+                {
+                    for (int j = _board.Column - 1; j >= 0; j--)
+                    {
+                        if (_board.Slots[i, j].IsEmpty)
+                        {
+                            to = from = _board.Slots[i, j].Position;
+                            while (_validator.IsEmptySlot(from = from.Up))
+                            {
+                                if (!_validator.IsSlot(from))
+                                    break;
+                            }
+                        
+                            if (_validator.IsSlot(from))
+                            {
+                                //lastTask = Shift(from, to);
+                                // _tasks.Add(Shift(from, to));
+                                // await UniTask.DelayFrame(1);
+                                _from = from;
+                                _to = to;
+                                return true;
+                                // await Shift(from, to);
+                                // i = _board.Row;
+                                // j = _board.Column;
+                            }
                         }
                     }
                 }
+
+                
+                return false;
             }
 
             // await lastTask;
