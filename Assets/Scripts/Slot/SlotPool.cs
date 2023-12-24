@@ -21,7 +21,6 @@ namespace Match3.Pool
         public override Slot Create()
         {
             _cashSlot = UnityEngine.GameObject.Instantiate(_prefab, _parent);
-            _cashSlot.SetActive(false);
             return _cashSlot;
         }
 
@@ -32,7 +31,7 @@ namespace Match3.Pool
 
         public override void Put(Slot item)
         {
-            item.SetActive(false);
+            item.Clear();
             base.Put(item);
         }
     }

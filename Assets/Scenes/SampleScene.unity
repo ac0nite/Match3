@@ -1251,8 +1251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Settings:
     BoardParam:
-      Row: 6
-      Column: 5
+      Row: 2
+      Column: 2
       TileSize: 1
     Animation:
       ShiftingTime: 0.5
@@ -1263,14 +1263,14 @@ MonoBehaviour:
       _spriteAnimation: {fileID: 11400000, guid: 7af884804e0610f4698def5e25ee11a0, type: 2}
     BoardConfig:
       Param:
-      - {fileID: 4900000, guid: 5e728b9c5263e4d8abf15134d8016448, type: 3}
-      - {fileID: 4900000, guid: d096e4685827443f5a4a15ff7d07971e, type: 3}
-      - {fileID: 4900000, guid: 9fa1ab96ffcd2457c993240905fa16b8, type: 3}
+      - {fileID: 4900000, guid: edeefa5cb40bf4e42a5d394a98f3a3eb, type: 3}
+      - {fileID: 4900000, guid: edeefa5cb40bf4e42a5d394a98f3a3eb, type: 3}
+      - {fileID: 4900000, guid: edeefa5cb40bf4e42a5d394a98f3a3eb, type: 3}
+      - {fileID: 4900000, guid: edeefa5cb40bf4e42a5d394a98f3a3eb, type: 3}
   _inputSystem: {fileID: 2009623167}
   _gameplayScreen: {fileID: 322709646}
   _animationEnvironment: {fileID: 1902096804}
   _slotPrefab: {fileID: 227217556159814421, guid: c04479a783a9f42468b79d8177f0fe50, type: 3}
-  _tilePrefab: {fileID: 6520408226805049010, guid: 0b5a47a962dd7426498e103a4e0daef4, type: 3}
 --- !u!4 &1657194946
 Transform:
   m_ObjectHideFlags: 0

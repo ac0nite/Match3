@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Match3.General;
+using Match3.Slots;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -8,24 +9,27 @@ namespace Match3.Board
 {
     public class BoardConverter
     {
-        public static string ToJson(Slot[,] slots)
+        public static string ToJson(Slot[] slots)
         {
-            BoardDetails board = new BoardDetails()
-            {
-                size = new Vector2(slots.GetLength(0), slots.GetLength(1)),
-                slots = new List<SlotDetails>(),
-            };
+            BoardDetails details = new BoardDetails();
+            details.SlotSerializables = new SlotSerializable[slots.Length];
 
-            foreach (var slot in slots)
+            for (int i = 0; i < slots.Length; i++)
             {
-                board.slots.Add(new SlotDetails()
-                {
-                    grid = new Vector2(slot.Position.RowIndex, slot.Position.ColumnIndex),
-                    id = slot.IsEmpty ? String.Empty : slot.Tile.ID
-                });
+                details.SlotSerializables[i] = slots[i].ToSerializable();
             }
 
-            string json = JsonConvert.SerializeObject(board);
+            string json = String.Empty;
+            // try
+            // {
+            //     json = JsonConvert.SerializeObject(details);
+            // }
+            // catch (Exception e)
+            // {
+            //     Console.WriteLine(e);
+            //     throw;
+            // }
+            
             ToDetails(json);
 
             return json;
@@ -44,19 +48,11 @@ namespace Match3.Board
             }
         }
     }
-    
-    [Serializable]
-    public struct SlotDetails
-    {
-        public Vector2 grid;
-        public string id;
-    }
 
 
     [Serializable]
     public class BoardDetails
     {
-        public Vector2 size;
-        public List<SlotDetails> slots;
+        [JsonProperty("board")] public SlotSerializable[] SlotSerializables;
     }
 }

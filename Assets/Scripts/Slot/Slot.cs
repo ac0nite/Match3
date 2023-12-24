@@ -1,24 +1,22 @@
-﻿using Common;
+﻿using Cysharp.Threading.Tasks;
+using ID;
+using Match3.Models;
+using Match3.Slots;
 using UnityEngine;
 
 namespace Match3.General
 {
-    public class Slot : MonoBehaviour
+    public class Slot : SlotBase
     {
-        public GridPosition Position { get; private set; }
-        public Tile Tile { get; private set; }
-        public bool IsMatch { get; set; }
+        public override UniqueID ID { get; set; }
+        public override GridPosition Position { get; set; }
+        public override bool IsMatch { get; set; }
 
-        public void SetActive(bool active)
-        {
-            gameObject.SetActive(active);
-            Tile?.SetActive(active);
-        }
-        
         public void SetGridPosition(GridPosition position)
         {
             Position = position;
-            Tile?.UpdateOrder(Position.OrderIndex);
+            _animator.SortingOrder = Position.RowIndex + Position.ColumnIndex;
+            Debug.Log($"{this} {_animator.SortingOrder}", transform);
         }
         
         public void SetForceWorldPosition(Vector3 worldPosition)
@@ -26,27 +24,31 @@ namespace Match3.General
             transform.position = worldPosition;
         }
         
-        public void SetTile(Tile tile)
+        public void Initialise(TileModel spriteModel)
         {
-            Clear();
-            
-            Tile = tile;
-            Tile.Bind(transform, Position.OrderIndex);
+            ID = spriteModel.ID;
+            _animator.Initialise(spriteModel.SpriteAnimation);
+            _animator.PlayIdle(true);
         }
 
         public bool Match(Slot slot)
         {
             if (IsEmpty || slot.IsEmpty) return false;
-            return Tile.ID == slot.Tile.ID;
+            return ID == slot.ID;
         }
 
-        public bool IsEmpty => Tile == null;
+        public bool IsEmpty => _animator.IsEmpty;
         
         public void Clear()
         {
-            Tile = null;
+            _animator.Stop();
             IsMatch = false;
         }
-        public override string ToString() => IsEmpty ? $"[null] {Position}" : $"[{Tile.ID}] {Position}";
+        public override string ToString() => IsEmpty ? $"[null] {Position}" : $"[{ID}] {Position}";
+
+        public UniTask PlayDestroyAnimationAsync()
+        {
+            return _animator.PlayDestroyAsync();
+        }
     }
 }

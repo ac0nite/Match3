@@ -1,24 +1,24 @@
 ﻿
+using System;
+
 namespace Match3.General
 {
+    [Serializable]
     public struct GridPosition
     {
         public int RowIndex { get; private set; }
         public int ColumnIndex { get; private set; }
-        public int OrderIndex { get; private set; }
 
         public GridPosition(int rowIndex, int columnIndex)
         {
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
-            OrderIndex = -1;
         }
         
         public GridPosition(int rowIndex, int columnIndex, int orderIndex)
         {
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
-            OrderIndex = orderIndex;
         }
 
         public bool IsUp(GridPosition position)
@@ -57,10 +57,15 @@ namespace Match3.General
         public GridPosition Left => new GridPosition(RowIndex, ColumnIndex - 1);
         public GridPosition Right => new GridPosition(RowIndex, ColumnIndex + 1);
 
-
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            var grid = (GridPosition) obj;
+            return RowIndex == grid.RowIndex && ColumnIndex == grid.ColumnIndex;
+        }
         public override string ToString()
         {
-            return $"[{RowIndex}, {ColumnIndex}] [{OrderIndex}]";
+            return $"[{RowIndex}, {ColumnIndex}]";
         }
     }
 }

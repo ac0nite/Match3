@@ -30,7 +30,7 @@ namespace Match3.General
 
         public bool IsEmpty(GridPosition position)
         {
-            return _board.Slots[position.RowIndex, position.ColumnIndex].Tile == null;
+            return _board[position].IsEmpty;
         }
 
         public bool IsEmptySlot(GridPosition position)
@@ -41,7 +41,7 @@ namespace Match3.General
             if (!IsSlot(position))
                 return true;
 
-            return _board.Slots[position.RowIndex, position.ColumnIndex].IsEmpty;
+            return _board[position].IsEmpty;
         }
     }
 }

@@ -23,12 +23,10 @@ namespace Match3.Services
         private readonly IBoardModel _boardModel;
         private BoardParam _boardParam;
         private Vector3 _originalPosition;
-        private readonly IPool<Tile> _tilePool;
 
         public BoardService(ApplicationContext context)
         {
             _boardModel = context.Resolve<IBoardModel>();
-            _tilePool = context.Resolve<IPool<Tile>>();
         }
 
         public void Initialise(BoardParam boardParam)
@@ -50,11 +48,10 @@ namespace Match3.Services
 
         public async UniTask CleanSlot(Slot slot)
         {
-            _boardModel.Counter[slot.Tile.ID]--;
+            _boardModel.Counter[slot.ID]--;
             
-            await slot.Tile.PlayDestroyAnimationAsync();
-
-            _tilePool.Put(slot.Tile);
+            await slot.PlayDestroyAnimationAsync();
+            
             slot.Clear();
 
             await UniTask.DelayFrame(1);

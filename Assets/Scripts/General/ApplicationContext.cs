@@ -49,7 +49,6 @@ namespace Match3.Context
         [SerializeField] private GameplayScreen _gameplayScreen;
         [SerializeField] private AnimationEnvironment _animationEnvironment;
         [SerializeField] private Slot _slotPrefab;
-        [SerializeField] private Tile _tilePrefab;
 
         private Dictionary<Type, object> _registeredTypes;
 
@@ -60,8 +59,7 @@ namespace Match3.Context
             RegisterInstance<IStateMachine<BaseState>>(new StateMachine<BaseState>());
             RegisterInstance<IScreenService>(new ScreenService());
 
-            RegisterInstance<IPool<Slot>>(new SlotPool(_slotPrefab, Settings.BoardParam.Capacity));
-            RegisterInstance<IPool<Tile>>(new TilePool(_tilePrefab, Settings.BoardParam.Capacity));
+            RegisterInstance<IPool<Slot>>(new SlotPool(_slotPrefab, 200));
 
             RegisterInstance<IInputSystem>(_inputSystem);
             RegisterInstance<IBoardModel>(new BoardModel());

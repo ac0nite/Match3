@@ -33,12 +33,9 @@ namespace Match3.General
         public bool Find()
         {
             isMatch = false;
-            for (int i = 0; i < _board.Row; i++)
+            for (int i = 0; i < _board.Capacity; i++)
             {
-                for (int j = 0; j < _board.Column; j++)
-                {   
-                    TryToFindAndMark(_board.Slots[i, j]);
-                }
+                TryToFindAndMark(_board.Slots[i]);
             }
             return isMatch;
         }
@@ -62,16 +59,16 @@ namespace Match3.General
 
         private void MarkAsMatch(GridPosition position)
         {
-            _board.Slots[position.RowIndex, position.ColumnIndex].IsMatch = true;
+            _board[position].IsMatch = true;
         }
 
+        private int Index(GridPosition position) => position.ColumnIndex * _board.Row + position.RowIndex;
         private bool IsMatch3(Slot slot, GridPosition neighborOne, GridPosition neighborTwo)
         {
             if (_validator.IsEmptySlot(neighborOne) || _validator.IsEmptySlot(neighborTwo))
                 return false;
-
-            if (slot.Match(_board.Slots[neighborOne.RowIndex, neighborOne.ColumnIndex]) &&
-                slot.Match(_board.Slots[neighborTwo.RowIndex, neighborTwo.ColumnIndex]))
+            
+            if (slot.Match(_board[neighborOne]) && slot.Match(_board[neighborTwo]))
                 return true;
 
             return false;
