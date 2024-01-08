@@ -14,7 +14,7 @@ namespace Match3.Animation
         void PlayIdle(bool isBeginFrameRandom);
         void PlayDestroy(Action callback);
         UniTask PlayDestroyAsync();
-        void Stop();
+        void Dispose();
         bool IsEmpty { get; }
     }
     public class Animator : SpriteAnimator, IAnimator
@@ -22,7 +22,9 @@ namespace Match3.Animation
         public void Initialise(SpriteAnimationObject animationObject)
         {
             Debug.Log($"Initialise", transform);
+            
             ChangeAnimationObject(animationObject);
+            _spriteRenderer.enabled = true;
         }
 
         public int SortingOrder
@@ -53,14 +55,12 @@ namespace Match3.Animation
             return utcs.Task; 
         }
 
-        public void Stop()
+        public void Dispose()
         {
             Pause();
-            //_currentAnimation = null;
-            //ChangeAnimationObject(null);
-            Debug.Log($"Stop", transform);
+            _spriteRenderer.enabled = false;
         }
 
-        public bool IsEmpty { get => _currentAnimation == null; }
+        public bool IsEmpty { get => _spriteRenderer.enabled; }
     }
 }

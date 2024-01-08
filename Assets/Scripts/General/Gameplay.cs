@@ -60,12 +60,15 @@ namespace Match3.General
         private void TryToCheckSlot(Vector3 worldPosition)
         {
             _beginPositionGrid = _boardService.GetGridPositionByPointer(worldPosition);
+            Debug.Log($"Begin:{_beginPositionGrid}");
+            
             if (_validator.IsEmptySlot(_beginPositionGrid))
                 _beginPositionGrid = GridPosition.Empty;
             // else
             // {
-            //     UnityEngine.Debug.Log($"Begin grid:{_beginPositionGrid} slot:{_board.Slots[_beginPositionGrid.RowIndex, _beginPositionGrid.ColumnIndex].Position}");   
+            //     Debug.Log($"Begin:{_beginPositionGrid}");   
             // }
+            
         }
         
         private void TryToNextCheckSlot(Vector3 worldPosition)
@@ -81,19 +84,15 @@ namespace Match3.General
             {
                 if (_beginPositionGrid.IsSides(_endPositionGrid) || _beginPositionGrid.IsDown(_endPositionGrid))
                 {
-                    //UnityEngine.Debug.Log($"SIDES AND DOWN {_endPositionGrid.ToString()}");
                     UpdateBoardAsync();
                 }
                 else if(_beginPositionGrid.IsUp(_endPositionGrid) && !_validator.IsEmpty(_endPositionGrid))
                 {
-                    UnityEngine.Debug.Log($"UP {_endPositionGrid.ToString()}");
-                    // Shift();
                     UpdateBoardAsync();
                 }
                 else
                 {
                     _endPositionGrid = GridPosition.Empty;
-                    //UnityEngine.Debug.Log($"-");
                 }
             }
         }
@@ -101,19 +100,12 @@ namespace Match3.General
         public async UniTask UpdateBoardAsync()
         {
             _input.Lock = true;
-            await _shifting.Shift(_beginPositionGrid, _endPositionGrid);
-
-            await _updateBoard.UpdateAsync();
-            // _matching.Find();
-            // do
-            // {
-            //     await _cleaning.MatchExecuteAsync();
-            //     await _shifting.AllShiftAsync();
-            // } 
-            // while (_matching.Find());
-            //
-            // _checkingResult.Check();
             
+            Debug.Log($"End:{_endPositionGrid}");
+            
+            // await _shifting.Shift(_beginPositionGrid, _endPositionGrid);
+            // await _updateBoard.UpdateAsync();
+
             _beginPositionGrid = GridPosition.Empty;
             _endPositionGrid = GridPosition.Empty;
             _input.Lock = false;

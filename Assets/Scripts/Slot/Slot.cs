@@ -41,7 +41,7 @@ namespace Match3.General
         
         public void Clear()
         {
-            _animator.Stop();
+            _animator.Dispose();
             IsMatch = false;
         }
         public override string ToString() => IsEmpty ? $"[null] {Position}" : $"[{ID}] {Position}";

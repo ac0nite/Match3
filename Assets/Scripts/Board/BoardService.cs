@@ -34,6 +34,8 @@ namespace Match3.Services
             _boardParam = boardParam;
             _originalPosition = GetOriginPosition(_boardParam.Row, _boardParam.Column);
             _boardModel.Initialise(_boardParam.Row, _boardParam.Column);
+            
+            Debug.Log($"Original Position:{_originalPosition}");
         }
 
         public Vector3 GetWorldPosition(GridPosition position)
@@ -62,20 +64,25 @@ namespace Match3.Services
             var rowIndex = (worldPointerPosition - _originalPosition).y / _boardParam.TileSize;
             var columnIndex = (worldPointerPosition - _originalPosition).x / _boardParam.TileSize;
 
-            return new GridPosition(Convert.ToInt32(-rowIndex), Convert.ToInt32(columnIndex));
+            return new GridPosition(Convert.ToInt32(rowIndex), Convert.ToInt32(columnIndex));
         }
 
         public Vector3 GetWorldPosition(int rowIndex, int columnIndex)
         {
-            return new Vector3(columnIndex, -rowIndex) * _boardParam.TileSize + _originalPosition;
+            return new Vector3(columnIndex, rowIndex) * _boardParam.TileSize + _originalPosition;
         }
 
         private Vector3 GetOriginPosition(int rowCount, int columnCount)
         {
-            var offsetY = Mathf.Floor(rowCount / 2.0f) * _boardParam.TileSize;
-            var offsetX = Mathf.Floor(columnCount / 2.0f) * _boardParam.TileSize;
-
-            return new Vector3(-offsetX, offsetY);
+            // var offsetY = Mathf.Floor(rowCount / 2.0f) * _boardParam.TileSize;
+            // var offsetX = Mathf.Floor(columnCount / 2.0f) * _boardParam.TileSize;
+            
+            
+            
+            var offsetY =  (rowCount / 2.0f);
+            var offsetX =  (columnCount / 2.0f);
+            
+            return new Vector3(-offsetX, -offsetY);
         }
     }
 }

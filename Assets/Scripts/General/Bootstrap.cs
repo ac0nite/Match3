@@ -16,8 +16,8 @@ namespace Match3.General
 
         private void Start()
         {
-            _stateMachine = _applicationContext.Resolve<IStateMachine<BaseState>>();
-            _stateMachine.Next<InitialiseState>();
+            //_stateMachine = _applicationContext.Resolve<IStateMachine<BaseState>>();
+            //_stateMachine.Next<InitialiseState>();
         }
     }
 }
