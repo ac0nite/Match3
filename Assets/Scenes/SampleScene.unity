@@ -336,10 +336,11 @@ MonoBehaviour:
   _boundsViewport:
     Top: 0.9
     BottomLeft: {x: 0.05, y: 0.14}
-  Size: {x: 5, y: 8}
-  OffsetPositionScale: 1.03
+  Size: {x: 4, y: 4}
+  OffsetPositionScale: 0.95
   _tabletOffsetPercentViewportX: 0
   _prefab: {fileID: 7145471527179106372, guid: a35630470a4e046cdad18a551c1e39b1, type: 3}
+  boundsBoardSettings: {fileID: 11400000, guid: 9e58e3930cfa441938b19c7971238e5a, type: 2}
 --- !u!1 &246549911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,10 +1303,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Settings:
-    BoardParam:
-      Row: 1
-      Column: 1
-      TileSize: 2
+    boardSettings:
+      Bounds: {fileID: 11400000, guid: 9e58e3930cfa441938b19c7971238e5a, type: 2}
+      Row: 4
+      Column: 4
     Animation:
       ShiftingTime: 0.5
     SpriteModels:
@@ -1314,15 +1315,12 @@ MonoBehaviour:
     - _id: fire
       _spriteAnimation: {fileID: 11400000, guid: 7af884804e0610f4698def5e25ee11a0, type: 2}
     BoardConfig:
-      Param:
-      - {fileID: 4900000, guid: edeefa5cb40bf4e42a5d394a98f3a3eb, type: 3}
-      - {fileID: 4900000, guid: edeefa5cb40bf4e42a5d394a98f3a3eb, type: 3}
-      - {fileID: 4900000, guid: edeefa5cb40bf4e42a5d394a98f3a3eb, type: 3}
-      - {fileID: 4900000, guid: edeefa5cb40bf4e42a5d394a98f3a3eb, type: 3}
+      Param: []
   _inputSystem: {fileID: 2009623167}
   _gameplayScreen: {fileID: 322709646}
   _animationEnvironment: {fileID: 1902096804}
   _slotPrefab: {fileID: 227217556159814421, guid: c04479a783a9f42468b79d8177f0fe50, type: 3}
+  _camera: {fileID: 519420031}
 --- !u!4 &1657194946
 Transform:
   m_ObjectHideFlags: 0

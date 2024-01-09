@@ -38,7 +38,7 @@ namespace Match3.General
 
         public void Create()
         {
-            _boardService.Initialise(_settings.BoardParam);
+            _boardService.Initialise(_settings.boardSettings);
             for (int i = 0; i < _board.Row; i++)
             {
                 for (int j = 0; j < _board.Column; j++)
@@ -46,6 +46,8 @@ namespace Match3.General
                     var slot = _slotPool.Get();
                     slot.SetGridPosition(new GridPosition(i,j, _boardService.OrderLayer(i,j)));
                     slot.SetForceWorldPosition(_boardService.GetWorldPosition(i,j));
+                    slot.transform.localScale = _boardService.GetTileScale;
+                        
                     _board.Slots[i * _board.Column + j] = slot;
                 }
             }
@@ -104,7 +106,7 @@ namespace Match3.General
             // }
 
             Save();
-            _updateBoard.UpdateAsync();
+            //_updateBoard.UpdateAsync();
         }
 
         private void Save()

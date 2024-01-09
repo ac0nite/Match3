@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Board.Settings;
 using Common;
 using Match3.Board;
 using Match3.Environment;
@@ -10,25 +11,25 @@ using Match3.Screen;
 using Match3.Services;
 using Match3.StateMachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Match3.Context
 {
     [Serializable]
     public struct Settings
     {
-        public BoardParam BoardParam;
+        [FormerlySerializedAs("BoardParam")] public BoardSettings boardSettings;
         public AnimationSettings Animation;
         public TileModel[] SpriteModels;
         public BoardConfig BoardConfig;
     }
     
     [Serializable]
-    public struct BoardParam
+    public struct BoardSettings
     {
+        public BoundsBoardSettingsSO Bounds;
         public int Row;
         public int Column;
-        public float TileSize;
-        public int Capacity => Row * Column;
     }
 
     [Serializable]
@@ -49,6 +50,7 @@ namespace Match3.Context
         [SerializeField] private GameplayScreen _gameplayScreen;
         [SerializeField] private AnimationEnvironment _animationEnvironment;
         [SerializeField] private Slot _slotPrefab;
+        [SerializeField] private Camera _camera;
 
         private Dictionary<Type, object> _registeredTypes;
 
@@ -63,7 +65,7 @@ namespace Match3.Context
 
             RegisterInstance<IInputSystem>(_inputSystem);
             RegisterInstance<IBoardModel>(new BoardModel());
-            RegisterInstance<IBoardService>(new BoardService(this));
+            RegisterInstance<IBoardService>(new BoardService(this, _camera));
             RegisterInstance<IValidator>(new SlotValidator(this));
             RegisterInstance<IClearing>(new ClearingBoard(this));
             RegisterInstance<IMatching, ICheckResult>(new FindMatching(this));

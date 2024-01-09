@@ -1,37 +1,11 @@
 using System;
+using Board.Settings;
 using Match3.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Board
 {
-    [Serializable]
-    struct BoardBounds
-    {
-        public BoardBounds(Camera camera, BoundsViewport viewport, float offsetPercentViewportX = 0f)
-        {
-            var tabletOffsetX = (1 - viewport.BottomLeft.x) * offsetPercentViewportX;
-            BottomLeft = camera.ViewportToWorldPoint(new Vector3(viewport.BottomLeft.x + tabletOffsetX , viewport.BottomLeft.y));
-            BottomRight = camera.ViewportToWorldPoint(new Vector3(1 - viewport.BottomLeft.x - tabletOffsetX, viewport.BottomLeft.y));
-            TopLeft = camera.ViewportToWorldPoint(new Vector3(viewport.BottomLeft.x + tabletOffsetX, viewport.Top));
-            TopRight = camera.ViewportToWorldPoint(new Vector3(1 - viewport.BottomLeft.x - tabletOffsetX, viewport.Top));
-        }
-        
-        public Vector3 BottomLeft;
-        public Vector3 BottomRight;
-        public Vector3 TopLeft;
-        public Vector3 TopRight;
-
-        public float BottomSize => BottomRight.x - BottomLeft.x;
-        public float TopSize => TopLeft.y - BottomRight.y;
-    }
-
-    [Serializable]
-    struct BoundsViewport
-    {
-        public float Top;
-        public Vector2 BottomLeft;
-    }
-    
     public class BoardTest : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
@@ -42,13 +16,29 @@ namespace Board
         [SerializeField] private GameObject _prefab;
         
         private BoardBounds _bounds;
-        private BoardBounds _boundsScreen;
+
+        [FormerlySerializedAs("BoardSettings")] [Space] [SerializeField] private BoundsBoardSettingsSO boundsBoardSettings;
+        private BoundsParam _param;
 
         private void Start()
         {
-            PlaceSprites();
+            _param = new BoundsParam(boundsBoardSettings, _camera);
+            _param.Calculate(Size);
+            
+            for (int i = 0; i < Size.y; i++)
+            {
+                for (int j = 0; j < Size.x; j++)
+                {
+                    Vector3 spritePosition = new Vector3(_param.OriginalPosition.x + j * _param.TileSize, _param.OriginalPosition.y + i * _param.TileSize, 0);
+                    var item = Instantiate(_prefab, spritePosition, Quaternion.identity, transform);
+                    item.transform.localScale = Vector3.one * _param.TileScale;
+                    item.GetComponent<SpriteRenderer>().sortingOrder = i + j;
+                }
+            }
+            
+            //PlaceSprites();
         }
-        
+
         private void PlaceSprites()
         {
             float spriteSize = _prefab.GetComponent<SpriteRenderer>().bounds.size.x;
@@ -86,10 +76,10 @@ namespace Board
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(_bounds.BottomLeft, 0.2f);
-            Gizmos.DrawSphere(_bounds.BottomRight, 0.2f);
-            Gizmos.DrawSphere(_bounds.TopLeft, 0.2f);
-            Gizmos.DrawSphere(_bounds.TopRight, 0.2f);
+            Gizmos.DrawSphere(_param.Bounds.BottomLeft, 0.2f);
+            Gizmos.DrawSphere(_param.Bounds.BottomRight, 0.2f);
+            Gizmos.DrawSphere(_param.Bounds.TopLeft, 0.2f);
+            Gizmos.DrawSphere(_param.Bounds.TopRight, 0.2f);
         }  
 #endif
     }

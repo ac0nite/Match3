@@ -1,4 +1,5 @@
 using System;
+using Board;
 using Common;
 using Cysharp.Threading.Tasks;
 using Match3.Context;
@@ -10,37 +11,44 @@ namespace Match3.Services
 {
     public interface IBoardService
     {
-        void Initialise(BoardParam boardParam);
+        void Initialise(BoardSettings boardSettings);
         Vector3 GetWorldPosition(GridPosition begin);
         GridPosition GetGridPositionByPointer(Vector3 worldPointerPosition);
         Vector3 GetWorldPosition(int rowIndex, int columnIndex);
         int OrderLayer(int rowIndex, int columnIndex);
         UniTask CleanSlot(Slot slot);
+        Vector3 GetTileScale { get; }
     }
     
     public class BoardService : IBoardService
     {
         private readonly IBoardModel _boardModel;
-        private BoardParam _boardParam;
-        private Vector3 _originalPosition;
+        // private Vector3 _originalPosition;
+        private readonly Camera _camera;
+        private BoundsParam Bounds { get; set; }
+        public Vector3 GetTileScale { get; private set; }
 
-        public BoardService(ApplicationContext context)
+        public BoardService(ApplicationContext context, Camera camera)
         {
             _boardModel = context.Resolve<IBoardModel>();
+            _camera = camera;
         }
 
-        public void Initialise(BoardParam boardParam)
+        public void Initialise(BoardSettings boardSettings)
         {
-            _boardParam = boardParam;
-            _originalPosition = GetOriginPosition(_boardParam.Row, _boardParam.Column);
-            _boardModel.Initialise(_boardParam.Row, _boardParam.Column);
+            Bounds ??= new BoundsParam(boardSettings.Bounds, _camera);
+            Bounds.Calculate(new Vector2Int(boardSettings.Row, boardSettings.Column));
+            GetTileScale = Vector3.one * Bounds.TileScale;
             
-            Debug.Log($"Original Position:{_originalPosition}");
+            // _originalPosition = GetOriginPosition(_boardSettings.Row, _boardSettings.Column);
+            _boardModel.Initialise(boardSettings.Row, boardSettings.Column);
+            
+            //Debug.Log($"Original Position:{_originalPosition}");
         }
 
         public Vector3 GetWorldPosition(GridPosition position)
         {
-            return new Vector3(position.ColumnIndex, -position.RowIndex) * _boardParam.TileSize + _originalPosition;
+            return new Vector3(position.ColumnIndex, -position.RowIndex) * Bounds.TileSize + Bounds.OriginalPosition;
         }
 
         public int OrderLayer(int rowIndex, int columnIndex)
@@ -58,31 +66,31 @@ namespace Match3.Services
 
             await UniTask.DelayFrame(1);
         }
-        
+
         public GridPosition GetGridPositionByPointer(Vector3 worldPointerPosition)
         {
-            var rowIndex = (worldPointerPosition - _originalPosition).y / _boardParam.TileSize;
-            var columnIndex = (worldPointerPosition - _originalPosition).x / _boardParam.TileSize;
+            var rowIndex = (worldPointerPosition - Bounds.OriginalPosition).y / Bounds.TileSize;
+            var columnIndex = (worldPointerPosition - Bounds.OriginalPosition).x / Bounds.TileSize;
 
             return new GridPosition(Convert.ToInt32(rowIndex), Convert.ToInt32(columnIndex));
         }
 
         public Vector3 GetWorldPosition(int rowIndex, int columnIndex)
         {
-            return new Vector3(columnIndex, rowIndex) * _boardParam.TileSize + _originalPosition;
+            return new Vector3(columnIndex, rowIndex) * Bounds.TileSize + Bounds.OriginalPosition;
         }
 
-        private Vector3 GetOriginPosition(int rowCount, int columnCount)
-        {
-            // var offsetY = Mathf.Floor(rowCount / 2.0f) * _boardParam.TileSize;
-            // var offsetX = Mathf.Floor(columnCount / 2.0f) * _boardParam.TileSize;
-            
-            
-            
-            var offsetY =  (rowCount / 2.0f);
-            var offsetX =  (columnCount / 2.0f);
-            
-            return new Vector3(-offsetX, -offsetY);
-        }
+        // private Vector3 GetOriginPosition(int rowCount, int columnCount)
+        // {
+        //     // var offsetY = Mathf.Floor(rowCount / 2.0f) * _boardParam.TileSize;
+        //     // var offsetX = Mathf.Floor(columnCount / 2.0f) * _boardParam.TileSize;
+        //     
+        //     
+        //     
+        //     var offsetY =  (rowCount / 2.0f);
+        //     var offsetX =  (columnCount / 2.0f);
+        //     
+        //     return new Vector3(-offsetX, -offsetY);
+        // }
     }
 }

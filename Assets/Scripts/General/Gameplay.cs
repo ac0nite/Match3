@@ -99,6 +99,8 @@ namespace Match3.General
 
         public async UniTask UpdateBoardAsync()
         {
+            return;
+            
             _input.Lock = true;
             
             Debug.Log($"End:{_endPositionGrid}");
