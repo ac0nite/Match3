@@ -304,7 +304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &91848030
 Transform:
   m_ObjectHideFlags: 0
@@ -333,12 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 519420031}
-  _boundsViewport:
-    Top: 0.9
-    BottomLeft: {x: 0.05, y: 0.14}
-  Size: {x: 4, y: 4}
-  OffsetPositionScale: 0.95
-  _tabletOffsetPercentViewportX: 0
+  Size: {x: 6, y: 8}
   _prefab: {fileID: 7145471527179106372, guid: a35630470a4e046cdad18a551c1e39b1, type: 3}
   boundsBoardSettings: {fileID: 11400000, guid: 9e58e3930cfa441938b19c7971238e5a, type: 2}
 --- !u!1 &246549911
@@ -1306,7 +1301,7 @@ MonoBehaviour:
     boardSettings:
       Bounds: {fileID: 11400000, guid: 9e58e3930cfa441938b19c7971238e5a, type: 2}
       Row: 4
-      Column: 4
+      Column: 6
     Animation:
       ShiftingTime: 0.5
     SpriteModels:

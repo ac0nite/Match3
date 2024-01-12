@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BoardSettingsSO_default
   m_EditorClassIdentifier: 
   SpritePixelSize: 300
-  BoundsViewport:
-    Top: 0.9
-    BottomLeft: {x: 0.1, y: 0.14}
-  OffsetPositionScale: 0.66
-  TabletOffsetPercentViewportX: 0
+  Top: 0.9
+  Bottom: 0.15
+  Edge: 0.11
+  OffsetScale: 0.66
+  TabletOffsetHorizontalPercentX: 0.043
