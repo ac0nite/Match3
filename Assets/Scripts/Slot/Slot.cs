@@ -1,8 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
 using ID;
 using Match3.Models;
+using Match3.Services;
 using Match3.Slots;
-using UnityEngine;
 
 namespace Match3.General
 {
@@ -12,21 +12,25 @@ namespace Match3.General
         public override GridPosition Position { get; set; }
         public override bool IsMatch { get; set; }
 
-        public void SetGridPosition(GridPosition position)
+        public void ChangeGridPosition(GridPosition position)
         {
             Position = position;
             _animator.SortingOrder = Position.RowIndex + Position.ColumnIndex;
-            Debug.Log($"{this} {_animator.SortingOrder}", transform);
+            // Debug.Log($"{this} {_animator.SortingOrder}", transform);
         }
         
-        public void SetForceWorldPosition(Vector3 worldPosition)
+        public Slot Configure(IBoardService service, int rowIndex, int columnIndex)
         {
-            transform.position = worldPosition;
+            ChangeGridPosition(new GridPosition(rowIndex, columnIndex));
+            transform.localScale = service.GetTileScale;
+            transform.position = service.GetWorldPosition(Position);
+            return this;
         }
         
         public void Initialise(TileModel spriteModel)
         {
             ID = spriteModel.ID;
+            
             _animator.Initialise(spriteModel.SpriteAnimation);
             _animator.PlayIdle(true);
         }

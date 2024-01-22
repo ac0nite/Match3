@@ -14,12 +14,6 @@ namespace Match3.General
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
         }
-        
-        public GridPosition(int rowIndex, int columnIndex, int orderIndex)
-        {
-            RowIndex = rowIndex;
-            ColumnIndex = columnIndex;
-        }
 
         public bool IsUp(GridPosition position)
         {
@@ -52,8 +46,8 @@ namespace Match3.General
 
         public static GridPosition Empty => new GridPosition(-1, -1);
         public bool IsEmpty => RowIndex < 0 && ColumnIndex < 0;
-        public GridPosition Up => new GridPosition(RowIndex - 1, ColumnIndex);
-        public GridPosition Down => new GridPosition(RowIndex + 1, ColumnIndex);
+        public GridPosition Up => new GridPosition(RowIndex + 1, ColumnIndex);
+        public GridPosition Down => new GridPosition(RowIndex - 1, ColumnIndex);
         public GridPosition Left => new GridPosition(RowIndex, ColumnIndex - 1);
         public GridPosition Right => new GridPosition(RowIndex, ColumnIndex + 1);
 

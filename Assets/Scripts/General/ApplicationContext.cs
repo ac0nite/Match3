@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Board;
 using Board.Settings;
 using Common;
 using Match3.Board;
@@ -28,8 +29,7 @@ namespace Match3.Context
     public struct BoardSettings
     {
         public BoundsBoardSettingsSO Bounds;
-        public int Row;
-        public int Column;
+        public BoardSize Size;
     }
 
     [Serializable]
@@ -60,7 +60,7 @@ namespace Match3.Context
             
             RegisterInstance<IStateMachine<BaseState>>(new StateMachine<BaseState>());
             RegisterInstance<IScreenService>(new ScreenService());
-
+            
             RegisterInstance<IPool<Slot>>(new SlotPool(_slotPrefab, 200));
 
             RegisterInstance<IInputSystem>(_inputSystem);

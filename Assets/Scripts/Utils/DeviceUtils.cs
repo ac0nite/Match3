@@ -62,14 +62,14 @@ public class DeviceUtils
 #if UNITY_IOS
             if (SystemInfo.deviceModel.Contains("iPad")) return true; else return false;
 #else
-            float ssw = Screen.width > Screen.height ? Screen.width : Screen.height;
+            float ssw = UnityEngine.Screen.width > UnityEngine.Screen.height ? UnityEngine.Screen.width : UnityEngine.Screen.height;
 
             if (ssw < 800) return false;
 
             if (UnityEngine.Application.platform == RuntimePlatform.Android || UnityEngine.Application.platform == RuntimePlatform.IPhonePlayer)
             {
-                float screenWidth = Screen.width / Screen.dpi;
-                float screenHeight = Screen.height / Screen.dpi;
+                float screenWidth = UnityEngine.Screen.width / UnityEngine.Screen.dpi;
+                float screenHeight = UnityEngine.Screen.height / UnityEngine.Screen.dpi;
                 float size = Mathf.Sqrt(Mathf.Pow(screenWidth, 2) + Mathf.Pow(screenHeight, 2));
                 if (size >= 6.5f) return true;
             }

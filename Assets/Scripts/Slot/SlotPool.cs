@@ -14,19 +14,19 @@ namespace Match3.Pool
         {
             _prefab = prefab;
             _parent = new GameObject($"{prefab.name}Pool").transform;
-            
+
             Initialise();
         }
 
         public override Slot Create()
         {
-            _cashSlot = UnityEngine.GameObject.Instantiate(_prefab, _parent);
+            _cashSlot = UnityEngine.Object.Instantiate(_prefab, _parent);
             return _cashSlot;
         }
 
-        public override Slot Configure(Slot item)
+        public override Slot Configure(Slot slot)
         {
-            return item;
+            return slot;
         }
 
         public override void Put(Slot item)

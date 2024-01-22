@@ -43,12 +43,7 @@ namespace Match3.General
             {
                 for (int j = 0; j < _board.Column; j++)
                 {
-                    var slot = _slotPool.Get();
-                    slot.SetGridPosition(new GridPosition(i,j, _boardService.OrderLayer(i,j)));
-                    slot.SetForceWorldPosition(_boardService.GetWorldPosition(i,j));
-                    slot.transform.localScale = _boardService.GetTileScale;
-                        
-                    _board.Slots[i * _board.Column + j] = slot;
+                    _board.Slots[i * _board.Column + j] = _slotPool.Get().Configure(_boardService, i, j);
                 }
             }
         }

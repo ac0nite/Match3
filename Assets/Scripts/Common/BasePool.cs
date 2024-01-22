@@ -26,6 +26,7 @@ namespace Common
         {
             return Configure(_pool.Dequeue());
         }
+        
 
         public virtual void Put(T item)
         {

@@ -60,15 +60,14 @@ namespace Match3.General
         private void TryToCheckSlot(Vector3 worldPosition)
         {
             _beginPositionGrid = _boardService.GetGridPositionByPointer(worldPosition);
-            Debug.Log($"Begin:{_beginPositionGrid}");
+            //Debug.Log($"Begin:{_beginPositionGrid}");
             
             if (_validator.IsEmptySlot(_beginPositionGrid))
                 _beginPositionGrid = GridPosition.Empty;
-            // else
-            // {
-            //     Debug.Log($"Begin:{_beginPositionGrid}");   
-            // }
-            
+            else
+            {
+                Debug.Log($"Begin:{_beginPositionGrid}");   
+            }
         }
         
         private void TryToNextCheckSlot(Vector3 worldPosition)
@@ -99,17 +98,16 @@ namespace Match3.General
 
         public async UniTask UpdateBoardAsync()
         {
-            return;
-            
             _input.Lock = true;
             
-            Debug.Log($"End:{_endPositionGrid}");
-            
-            // await _shifting.Shift(_beginPositionGrid, _endPositionGrid);
-            // await _updateBoard.UpdateAsync();
+            Debug.Log($"End:{_endPositionGrid}");   
+
+            await _shifting.SwapAsync(_beginPositionGrid, _endPositionGrid);
+            await _updateBoard.UpdateAsync();
 
             _beginPositionGrid = GridPosition.Empty;
             _endPositionGrid = GridPosition.Empty;
+            
             _input.Lock = false;
         }
     }

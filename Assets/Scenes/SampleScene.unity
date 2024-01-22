@@ -327,13 +327,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91848029}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98fe3fc2231349489c640feb9abe8b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 519420031}
-  Size: {x: 6, y: 8}
+  _size:
+    Row: 8
+    Column: 6
   _prefab: {fileID: 7145471527179106372, guid: a35630470a4e046cdad18a551c1e39b1, type: 3}
   boundsBoardSettings: {fileID: 11400000, guid: 9e58e3930cfa441938b19c7971238e5a, type: 2}
 --- !u!1 &246549911
@@ -1300,8 +1302,9 @@ MonoBehaviour:
   Settings:
     boardSettings:
       Bounds: {fileID: 11400000, guid: 9e58e3930cfa441938b19c7971238e5a, type: 2}
-      Row: 4
-      Column: 6
+      Size:
+        Row: 0
+        Column: 0
     Animation:
       ShiftingTime: 0.5
     SpriteModels:

@@ -5,7 +5,14 @@ using UnityEngine;
 
 namespace Board
 {
-    public class BoundsParam
+    [Serializable]
+    public struct BoardSize
+    {
+        public int Row;
+        public int Column;
+        public int Capacity => Row * Column;
+    }
+    public class BoardBounds
     {
         private readonly BoundsBoardSettingsSO _settings;
         private readonly float _spriteOriginalSize;
@@ -13,7 +20,7 @@ namespace Board
 
         private const float PixelPerUnit = 100;
 
-        public BoundsParam(BoundsBoardSettingsSO settings, Camera camera)
+        public BoardBounds(BoundsBoardSettingsSO settings, Camera camera)
         {
             _settings = settings;
 
@@ -22,11 +29,11 @@ namespace Board
             var offsetPercentViewportX = DeviceUtils.IsTablet ? _settings.TabletOffsetHorizontalPercentX : 0f;
             _edge = new BoardEdge(camera, _settings.Top, _settings.Bottom, _settings.Edge, offsetPercentViewportX);
         }
-
-        public void Calculate(Vector2Int size)
+        
+        public void Calculate(BoardSize size)
         {
-            float totalWidthX = _spriteOriginalSize * _settings.OffsetScale * size.x;
-            float totalWidthY = _spriteOriginalSize * _settings.OffsetScale * size.y;
+            float totalWidthX = _spriteOriginalSize * _settings.OffsetScale * size.Column;
+            float totalWidthY = _spriteOriginalSize * _settings.OffsetScale * size.Row;
 
             float scaleX = _edge.BottomSize / totalWidthX;
             float scaleY = _edge.TopSize / totalWidthY;
@@ -35,7 +42,7 @@ namespace Board
             
             TileSize = _spriteOriginalSize * _settings.OffsetScale * TileScale;
 
-            float offsetX = scaleY < scaleX ? (_edge.BottomSize - TileSize * size.x) * 0.5f : 0f;
+            float offsetX = scaleY < scaleX ? (_edge.BottomSize - TileSize * size.Column) * 0.5f : 0f;
             
             float startX = _edge.BottomLeft.x + TileSize * 0.5f + offsetX;
             float startY = _edge.BottomLeft.y + TileSize * 0.5f;
@@ -50,7 +57,6 @@ namespace Board
             0);
         public float TileSize { get; private set; }
         public float TileScale { get; private set; }
-
         public BoardEdge Edge => _edge;
     }
     

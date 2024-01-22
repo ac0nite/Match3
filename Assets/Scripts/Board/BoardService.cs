@@ -25,7 +25,7 @@ namespace Match3.Services
         private readonly IBoardModel _boardModel;
         // private Vector3 _originalPosition;
         private readonly Camera _camera;
-        private BoundsParam Bounds { get; set; }
+        private BoardBounds BoardBounds { get; set; }
         public Vector3 GetTileScale { get; private set; }
 
         public BoardService(ApplicationContext context, Camera camera)
@@ -36,19 +36,26 @@ namespace Match3.Services
 
         public void Initialise(BoardSettings boardSettings)
         {
-            Bounds ??= new BoundsParam(boardSettings.Bounds, _camera);
-            Bounds.Calculate(new Vector2Int(boardSettings.Row, boardSettings.Column));
-            GetTileScale = Vector3.one * Bounds.TileScale;
+            BoardBounds ??= new BoardBounds(boardSettings.Bounds, _camera);
+            BoardBounds.Calculate(boardSettings.Size);
+            GetTileScale = Vector3.one * BoardBounds.TileScale;
             
             // _originalPosition = GetOriginPosition(_boardSettings.Row, _boardSettings.Column);
-            _boardModel.Initialise(boardSettings.Row, boardSettings.Column);
+            _boardModel.Initialise(boardSettings.Size.Row, boardSettings.Size.Column);
             
             //Debug.Log($"Original Position:{_originalPosition}");
         }
 
         public Vector3 GetWorldPosition(GridPosition position)
         {
-            return new Vector3(position.ColumnIndex, -position.RowIndex) * Bounds.TileSize + Bounds.OriginalPosition;
+            return BoardBounds.WorldPosition(position.RowIndex, position.ColumnIndex);
+            //return new Vector3(position.ColumnIndex, -position.RowIndex) * BoardBounds.TileSize + BoardBounds.OriginalPosition;
+        }
+        
+        public Vector3 GetWorldPosition(int rowIndex, int columnIndex)
+        {
+            // return new Vector3(columnIndex, rowIndex) * BoardBounds.TileSize + BoardBounds.OriginalPosition;
+            return BoardBounds.WorldPosition(rowIndex, columnIndex);
         }
 
         public int OrderLayer(int rowIndex, int columnIndex)
@@ -69,15 +76,10 @@ namespace Match3.Services
 
         public GridPosition GetGridPositionByPointer(Vector3 worldPointerPosition)
         {
-            var rowIndex = (worldPointerPosition - Bounds.OriginalPosition).y / Bounds.TileSize;
-            var columnIndex = (worldPointerPosition - Bounds.OriginalPosition).x / Bounds.TileSize;
+            var rowIndex = (worldPointerPosition - BoardBounds.OriginalPosition).y / BoardBounds.TileSize;
+            var columnIndex = (worldPointerPosition - BoardBounds.OriginalPosition).x / BoardBounds.TileSize;
 
             return new GridPosition(Convert.ToInt32(rowIndex), Convert.ToInt32(columnIndex));
-        }
-
-        public Vector3 GetWorldPosition(int rowIndex, int columnIndex)
-        {
-            return new Vector3(columnIndex, rowIndex) * Bounds.TileSize + Bounds.OriginalPosition;
         }
 
         // private Vector3 GetOriginPosition(int rowCount, int columnCount)

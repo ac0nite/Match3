@@ -6,30 +6,37 @@ namespace Board
     public class BoardTest : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
-        [SerializeField] private Vector2Int Size;
+        [SerializeField] private BoardSize _size;
         [SerializeField] private GameObject _prefab;
-        
-        private BoardBounds _bounds;
 
         [Space] [SerializeField] private BoundsBoardSettingsSO boundsBoardSettings;
-        private BoundsParam _param;
+        private BoardBounds _boardBounds;
 
         private void Start()
         {
-            _param = new BoundsParam(boundsBoardSettings, _camera);
-            _param.Calculate(Size);
+            _boardBounds = new BoardBounds(boundsBoardSettings, _camera);
+            _boardBounds.Calculate(_size);
             
-            for (int i = 0; i < Size.y; i++)
+            // for (int i = 0; i < _size.Column; i++)
+            // {
+            //     for (int j = 0; j < _size.Row; j++)
+            //     {
+            //         var item = Instantiate(_prefab, _boardBounds.WorldPosition(i, j), Quaternion.identity, transform);
+            //         item.transform.localScale = Vector3.one * _boardBounds.TileScale;
+            //         item.GetComponent<SpriteRenderer>().sortingOrder = i + j;
+            //     }
+            // }
+
+            for (int i = 0; i < _size.Row; i++)
             {
-                for (int j = 0; j < Size.x; j++)
+                for (int j = 0; j < _size.Column; j++)
                 {
-                    Vector3 spritePosition = new Vector3(_param.OriginalPosition.x + j * _param.TileSize, _param.OriginalPosition.y + i * _param.TileSize, 0);
-                    var item = Instantiate(_prefab, spritePosition, Quaternion.identity, transform);
-                    item.transform.localScale = Vector3.one * _param.TileScale;
+                    var item = Instantiate(_prefab, _boardBounds.WorldPosition(i, j), Quaternion.identity, transform);
+                    item.transform.localScale = Vector3.one * _boardBounds.TileScale;
                     item.GetComponent<SpriteRenderer>().sortingOrder = i + j;
                 }
             }
-            
+
             //PlaceSprites();
         }
 
@@ -69,13 +76,13 @@ namespace Board
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            if(_param == null) return;
+            if(_boardBounds == null) return;
             
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(_param.Bounds.BottomLeft, 0.2f);
-            Gizmos.DrawSphere(_param.Bounds.BottomRight, 0.2f);
-            Gizmos.DrawSphere(_param.Bounds.TopLeft, 0.2f);
-            Gizmos.DrawSphere(_param.Bounds.TopRight, 0.2f);
+            Gizmos.DrawSphere(_boardBounds.Edge.BottomLeft, 0.2f);
+            Gizmos.DrawSphere(_boardBounds.Edge.BottomRight, 0.2f);
+            Gizmos.DrawSphere(_boardBounds.Edge.TopLeft, 0.2f);
+            Gizmos.DrawSphere(_boardBounds.Edge.TopRight, 0.2f);
         }  
 #endif
     }
