@@ -21,7 +21,7 @@ namespace Match3.Animation
     {
         public void Initialise(SpriteAnimationObject animationObject)
         {
-            Debug.Log($"Initialise", transform);
+            //Debug.Log($"Initialise", transform);
             
             ChangeAnimationObject(animationObject);
             _spriteRenderer.enabled = true;
@@ -61,6 +61,6 @@ namespace Match3.Animation
             _spriteRenderer.enabled = false;
         }
 
-        public bool IsEmpty { get => _spriteRenderer.enabled; }
+        public bool IsEmpty { get => !_spriteRenderer.enabled; }
     }
 }
