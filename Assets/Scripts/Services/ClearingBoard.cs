@@ -76,8 +76,11 @@ namespace Match3.General
             List<UniTask> _tasks = new List<UniTask>();
             foreach (var slot in _board.Slots)
             {
-                if(slot.IsMatch) 
+                if (!slot.IsEmpty && slot.IsMatch)
+                {
+                    Debug.Log($"clean: {slot}");
                     _tasks.Add(_boardService.CleanSlot(slot));
+                }
                 
             }
             // await lastTask;

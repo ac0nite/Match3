@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Board;
 using ID;
 using Match3.General;
 
@@ -6,31 +7,27 @@ namespace Match3.Models
 {
     public interface IBoardModel
     {
-        void Initialise(int row, int column);
+        void Initialise(BoardSize size);
         Slot[] Slots { get; }
-        int Row { get; }
-        int Column { get; }
-        int Capacity { get; }
+        BoardSize Size { get; }
         IDictionary<UniqueID, int> Counter { get; }
         Slot this[GridPosition position] { get; set; }
     }
 
     public class BoardModel : IBoardModel
     {
-        public void Initialise(int row, int column)
+        public void Initialise(BoardSize size)
         {
-            Slots = new Slot[row * column];
-            Row = row;
-            Column = column;
-            Capacity = row * column;
-            Counter = new Dictionary<UniqueID, int>();
+            Slots = new Slot[size.Capacity];
+            Size = size;
+            Counter ??= new Dictionary<UniqueID, int>();
+            Counter.Clear();
         }
 
         public Slot[] Slots { get; private set; }
-        public int Row { get; private set; }
-        public int Column { get; private set; }
-        public int Capacity { get; private set; }
-        private int GetIndex(GridPosition position) => position.RowIndex * Column + position.ColumnIndex;
+
+        public BoardSize Size { get; private set; }
+        private int GetIndex(GridPosition position) => position.RowIndex * Size.Column + position.ColumnIndex;
         public IDictionary<UniqueID, int> Counter { get; private set; }
 
         public Slot this[GridPosition position]

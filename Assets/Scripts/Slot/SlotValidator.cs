@@ -23,9 +23,9 @@ namespace Match3.General
         public bool IsSlot(GridPosition position)
         {
             return position.ColumnIndex >= 0 &&
-                   position.ColumnIndex < _board.Column &&
+                   position.ColumnIndex < _board.Size.Column &&
                    position.RowIndex >= 0 &&
-                   position.RowIndex < _board.Row;
+                   position.RowIndex < _board.Size.Row;
         }
 
         public bool IsEmpty(GridPosition position)

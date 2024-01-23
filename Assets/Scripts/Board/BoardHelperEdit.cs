@@ -22,7 +22,7 @@ namespace Match3.Utils
             {
                 var board = myScript.Resolve<IBoardModel>();
                 if(board.Slots == null) return;
-                var json = BoardConverter.ToJson(board.Slots);
+                var json = BoardConverter.ToJson(board);
                 string filepath = Path.Combine("Assets//settings", $"Board_{DateTime.Now.ToString("hmmsstt")}.json");
                 File.WriteAllText(filepath, json);
                 AssetDatabase.SaveAssets();

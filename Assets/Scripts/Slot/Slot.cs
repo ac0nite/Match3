@@ -3,6 +3,7 @@ using ID;
 using Match3.Models;
 using Match3.Services;
 using Match3.Slots;
+using UnityEngine;
 
 namespace Match3.General
 {
@@ -10,7 +11,7 @@ namespace Match3.General
     {
         public override UniqueID ID { get; set; }
         public override GridPosition Position { get; set; }
-        public override bool IsMatch { get; set; }
+        public override bool IsMatch { get; set; } = false;
 
         public void ChangeGridPosition(GridPosition position)
         {
@@ -22,8 +23,9 @@ namespace Match3.General
         public Slot Configure(IBoardService service, int rowIndex, int columnIndex)
         {
             ChangeGridPosition(new GridPosition(rowIndex, columnIndex));
-            transform.localScale = service.GetTileScale;
+            transform.localScale = service.BoardBounds.TileScale * Vector3.one;
             transform.position = service.GetWorldPosition(Position);
+            _animator.Dispose();
             return this;
         }
         

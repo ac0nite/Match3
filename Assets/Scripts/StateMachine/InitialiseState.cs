@@ -19,8 +19,8 @@ namespace Match3.StateMachine
             UnityEngine.Debug.Log($"INITIALISE STATE");
             
             _boardRenderer.Create();
-            _boardRenderer.RendererRandom();
-            // _boardRenderer.RendererConfig();
+            //_boardRenderer.RendererRandom();
+             _boardRenderer.RendererConfig();
             //
             _stateMachine.Next<GameplayState>();
         }

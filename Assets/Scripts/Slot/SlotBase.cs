@@ -19,8 +19,8 @@ namespace Match3.Slots
         {
             return new SlotSerializable()
             {
-                ID = ID,
-                Position = Position
+                ID = ID.Value,
+                Position = (Position.RowIndex << 8) + Position.ColumnIndex
             };
         }
     }
@@ -28,7 +28,7 @@ namespace Match3.Slots
     [Serializable]
     public struct SlotSerializable
     {
-        [JsonProperty("grid")] public GridPosition Position;
-        [JsonProperty("id")] public UniqueID ID;
+         [JsonProperty("grid")] public int Position;
+         [JsonProperty("id")] public string ID;
     }
 }

@@ -1,10 +1,12 @@
 using System;
-using System.IO;
+using Board.Config;
 using Common;
+using ID;
 using Match3.Board;
 using Match3.Context;
 using Match3.Models;
 using Match3.Services;
+using UnityEngine;
 
 namespace Match3.General
 {
@@ -25,6 +27,7 @@ namespace Match3.General
 
         private int _roundCounter;
         private readonly IUpdateBoard _updateBoard;
+        private readonly IBoardConfigs _boardConfigs;
 
         public BoardRenderer(ApplicationContext context)
         {
@@ -33,25 +36,44 @@ namespace Match3.General
             _boardService = context.Resolve<IBoardService>();
             _updateBoard = context.Resolve<IUpdateBoard>();
             _settings = context.Settings;
+            _boardConfigs = context.Resolve<IBoardConfigs>();
             _roundCounter = 0;
         }
 
         public void Create()
         {
-            _boardService.Initialise(_settings.boardSettings);
-            for (int i = 0; i < _board.Row; i++)
+            _boardConfigs.Update();
+            _boardService.Initialise(_settings.boardSettings, _boardConfigs.SlotsConfig.Size);
+            
+            for (int i = 0; i < _board.Size.Row; i++)
             {
-                for (int j = 0; j < _board.Column; j++)
+                for (int j = 0; j < _board.Size.Column; j++)
                 {
-                    _board.Slots[i * _board.Column + j] = _slotPool.Get().Configure(_boardService, i, j);
+                    _board.Slots[i * _board.Size.Column + j] = _slotPool.Get().Configure(_boardService, i, j);
                 }
             }
         }
 
         public void RendererConfig()
         {
-            RendererRandom();
+            // var boardDeSerialize = BoardConverter.ToDetails(_settings.boardSerializeConfigs.Param[0].text);
+            // RendererRandom();
             
+            foreach (var slot in _boardConfigs.SlotsConfig.Slots)
+            {
+                var tile = GetModel(new UniqueID(slot.Key));
+                foreach (GridPosition position in slot.Value)
+                {
+                    _board[position].Initialise(tile);
+                    InitialiseBoardCounter(tile);
+                }
+            }
+            
+            foreach (var pair in _board.Counter)
+            {
+                Debug.Log($"[{pair.Key}]:{pair.Value}");
+            }
+
             // if (_roundCounter >= _settings.BoardConfig.Param.Count)
             // {
             //     RendererRandom();
@@ -79,15 +101,15 @@ namespace Match3.General
 
         public void RendererRandom()
         {
-            UnityEngine.Debug.Log($"BOARD RANDOM");
-            for (int i = 0; i < _board.Capacity; i++)
-            {
-                var slot = _board.Slots[i];
-                var model = GetRandomModel();
-                slot.Initialise(model);
-
-                InitialiseBoardCounter(model);
-            }
+            // UnityEngine.Debug.Log($"BOARD RANDOM");
+            // for (int i = 0; i < _board.Size.Capacity; i++)
+            // {
+            //     var slot = _board.Slots[i];
+            //     var model = GetRandomModel();
+            //     slot.Initialise(model);
+            //
+            //     InitialiseBoardCounter(model);
+            // }
             // for (int i = 0; i < _board.Row; i++)
             // {
             //     for (int j = 0; j < _board.Column; j++)
@@ -100,17 +122,18 @@ namespace Match3.General
             //     }
             // }
 
-            Save();
+            //Save();
             //_updateBoard.UpdateAsync();
         }
 
         private void Save()
         {
-            var json = BoardConverter.ToJson(_board.Slots);
-            string filepath = System.IO.Path.Combine("Assets//settings", $"Board_{DateTime.Now.ToString("hmmsstt")}.json");
-            File.WriteAllText(filepath, json);
-            UnityEditor.AssetDatabase.SaveAssets();
-            UnityEngine.Debug.Log($"Save to: {filepath}");
+            var json = BoardConverter.ToJson(_board);
+            Debug.Log($"S: {json}");
+            // string filepath = System.IO.Path.Combine("Assets//settings", $"Board_{DateTime.Now.ToString("hmmsstt")}.json");
+            // File.WriteAllText(filepath, json);
+            // UnityEditor.AssetDatabase.SaveAssets();
+            // UnityEngine.Debug.Log($"Save to: {filepath}");
         }
 
         public void Clear()
@@ -126,8 +149,14 @@ namespace Match3.General
             return _settings.SpriteModels[index];
         }
 
+        private TileModel GetModel(UniqueID id)
+        {
+            return Array.Find(_settings.SpriteModels, model => model.ID == id);
+        }
+
         private void InitialiseBoardCounter(TileModel tile)
         {
+            Debug.Log($"{tile.ID.Value}");
             if (_board.Counter.ContainsKey(tile.ID))
                 _board.Counter[tile.ID]++;
             else

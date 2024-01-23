@@ -33,7 +33,7 @@ namespace Match3.General
         public bool Find()
         {
             isMatch = false;
-            for (int i = 0; i < _board.Capacity; i++)
+            for (int i = 0; i < _board.Size.Capacity; i++)
             {
                 TryToFindAndMark(_board.Slots[i]);
             }
@@ -62,7 +62,7 @@ namespace Match3.General
             _board[position].IsMatch = true;
         }
 
-        private int Index(GridPosition position) => position.ColumnIndex * _board.Row + position.RowIndex;
+        private int Index(GridPosition position) => position.ColumnIndex * _board.Size.Row + position.RowIndex;
         private bool IsMatch3(Slot slot, GridPosition neighborOne, GridPosition neighborTwo)
         {
             if (_validator.IsEmptySlot(neighborOne) || _validator.IsEmptySlot(neighborTwo))

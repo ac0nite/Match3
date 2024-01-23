@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Board;
+using Board.Config;
 using Board.Settings;
 using Common;
+using ID;
 using Match3.Board;
 using Match3.Environment;
 using Match3.General;
@@ -22,7 +24,7 @@ namespace Match3.Context
         [FormerlySerializedAs("BoardParam")] public BoardSettings boardSettings;
         public AnimationSettings Animation;
         public TileModel[] SpriteModels;
-        public BoardConfig BoardConfig;
+        [FormerlySerializedAs("boardConfigs")] [FormerlySerializedAs("BoardConfig")] public BoardSerializeConfigs boardSerializeConfigs;
     }
     
     [Serializable]
@@ -39,7 +41,7 @@ namespace Match3.Context
     }
 
     [Serializable]
-    public struct BoardConfig
+    public struct BoardSerializeConfigs
     {
         public List<TextAsset> Param;
     }
@@ -71,7 +73,9 @@ namespace Match3.Context
             RegisterInstance<IMatching, ICheckResult>(new FindMatching(this));
             RegisterInstance<IShifting>(new Shifting(this));
             RegisterInstance<IUpdateBoard>(new UpdateBoard(this));
-            
+            RegisterInstance<IScoreModel>(new ScoreModel(this));
+            RegisterInstance<IBoardConfigs>(new global::Board.Config.BoardConfigs(this));
+
             RegisterInstance<IGameplay>(new Gameplay(this));
             RegisterInstance<IBoardRenderer>(new BoardRenderer(this));
             RegisterInstance<IAnimationEnvironment>(_animationEnvironment);
