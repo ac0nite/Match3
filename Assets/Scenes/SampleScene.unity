@@ -1303,8 +1303,8 @@ MonoBehaviour:
     boardSettings:
       Bounds: {fileID: 11400000, guid: 9e58e3930cfa441938b19c7971238e5a, type: 2}
       Size:
-        Row: 0
-        Column: 0
+        Row: 3
+        Column: 3
     Animation:
       ShiftingTime: 0.5
     SpriteModels:
@@ -1312,8 +1312,9 @@ MonoBehaviour:
       _spriteAnimation: {fileID: 11400000, guid: e371c2de6f1dc5242b915886bdd4d1d9, type: 2}
     - _id: fire
       _spriteAnimation: {fileID: 11400000, guid: 7af884804e0610f4698def5e25ee11a0, type: 2}
-    BoardConfig:
-      Param: []
+    boardSerializeConfigs:
+      Param:
+      - {fileID: 4900000, guid: a76baa34a5698d94bbf51c0f977f8e9a, type: 3}
   _inputSystem: {fileID: 2009623167}
   _gameplayScreen: {fileID: 322709646}
   _animationEnvironment: {fileID: 1902096804}
