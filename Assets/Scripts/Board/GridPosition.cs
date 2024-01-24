@@ -17,14 +17,14 @@ namespace Match3.General
 
         public bool IsUp(GridPosition position)
         {
-            return ColumnIndex == position.ColumnIndex && 
-                   RowIndex == position.RowIndex + 1;
+            return RowIndex == position.RowIndex - 1 &&
+                   ColumnIndex == position.ColumnIndex;
         }
         
         public bool IsDown(GridPosition position)
         {
-            return ColumnIndex == position.ColumnIndex && 
-                   RowIndex == position.RowIndex - 1;
+            return RowIndex == position.RowIndex + 1 &&
+                   ColumnIndex == position.ColumnIndex;
         }
         
         public bool IsLeft(GridPosition position)

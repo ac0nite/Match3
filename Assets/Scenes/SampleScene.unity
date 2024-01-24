@@ -1313,8 +1313,7 @@ MonoBehaviour:
     - _id: fire
       _spriteAnimation: {fileID: 11400000, guid: 7af884804e0610f4698def5e25ee11a0, type: 2}
     boardSerializeConfigs:
-      Param:
-      - {fileID: 4900000, guid: a76baa34a5698d94bbf51c0f977f8e9a, type: 3}
+      Param: []
   _inputSystem: {fileID: 2009623167}
   _gameplayScreen: {fileID: 322709646}
   _animationEnvironment: {fileID: 1902096804}
