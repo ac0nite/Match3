@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Match3.Context;
 
 namespace Match3.StateMachine
 {
@@ -13,7 +14,7 @@ namespace Match3.StateMachine
         private Dictionary<Type, object> _states;
         private IState _currentState;
         
-        public StateMachine()
+        public StateMachine(ApplicationContext _)
         {
             _states = new Dictionary<Type, object>();
         }

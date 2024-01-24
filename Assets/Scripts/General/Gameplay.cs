@@ -29,7 +29,7 @@ namespace Match3.General
         private readonly ICheckResult _checkingResult;
         private readonly IUpdateBoard _updateBoard;
 
-        public Gameplay(ApplicationContext context)
+        public Gameplay(IContext context)
         {
             _input = context.Resolve<IInputSystem>();
             _boardService = context.Resolve<IBoardService>();

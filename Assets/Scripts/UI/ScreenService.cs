@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Match3.Context;
 
 namespace Common
 {
@@ -13,7 +14,7 @@ namespace Common
     {
         private Dictionary<Type, object> _screens;
 
-        public ScreenService()
+        public ScreenService(ApplicationContext _)
         {
             _screens = new Dictionary<Type, object>();
         }

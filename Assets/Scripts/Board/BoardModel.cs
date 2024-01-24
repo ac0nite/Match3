@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Board;
 using ID;
+using Match3.Context;
 using Match3.General;
 
 namespace Match3.Models
@@ -16,6 +17,8 @@ namespace Match3.Models
 
     public class BoardModel : IBoardModel
     {
+        public BoardModel(ApplicationContext _)
+        { }
         public void Initialise(BoardSize size)
         {
             Slots = new Slot[size.Capacity];

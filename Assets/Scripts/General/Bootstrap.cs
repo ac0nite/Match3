@@ -16,8 +16,15 @@ namespace Match3.General
 
         private void Start()
         {
+            _applicationContext.Build();
+            
             _stateMachine = _applicationContext.Resolve<IStateMachine<BaseState>>();
             _stateMachine.Next<InitialiseState>();
+        }
+
+        private void OnDestroy()
+        {
+            _applicationContext.Dispose();
         }
     }
 }

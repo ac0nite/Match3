@@ -1,4 +1,5 @@
 ﻿using Common;
+using Match3.Context;
 using Match3.General;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Match3.Pool
         private readonly Transform _parent;
         private Slot _cashSlot;
 
-        public SlotPool(Slot prefab, int capacity) : base(capacity)
+        public SlotPool(ApplicationContext _, Slot prefab, int capacity) : base(capacity)
         {
             _prefab = prefab;
             _parent = new GameObject($"{prefab.name}Pool").transform;
